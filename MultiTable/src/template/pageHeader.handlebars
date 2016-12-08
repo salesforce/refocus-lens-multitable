@@ -1,0 +1,48 @@
+<nav class="navbar navbar-full navbar-light bg-inverse perspective-spacing">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-xs-12">
+        <ul class="nav navbar-nav pull-xs-right" style="font-size: smaller">
+          <li class="nav-item m-r-1">
+            <label>
+              <input id="toggle-show-all" type="checkbox"/>
+              {{showAll.label}}
+            </label>
+          </li>
+          <li class="nav-item m-r-1">
+            <nobr>
+              {{lastUpdated.label}}
+              <span id="last-updated-at">{{lastUpdated.date}}</span>
+              <span id="last-updated-at-relative">({{lastUpdated.relative}})</span>
+            </nobr>
+          </li>
+          <li class="nav-item">
+            <span class="legend-item box status-Critical p-l-1"> </span>
+            {{legend.Critical.label}}
+          </li>
+          <li class="nav-item">
+            <span class="legend-item box status-Warning p-l-1"> </span>
+            {{legend.Warning.label}}
+          </li>
+          <li class="nav-item">
+            <span class="legend-item box status-Info p-l-1"> </span>
+            {{legend.Info.label}}
+          </li>
+          <li class="nav-item">
+            <span class="legend-item box status-OK p-l-1"> </span>
+            {{legend.OK.label}}
+          </li>
+          <li class="nav-item" data-toggle="tooltip" data-placement="bottom" title="{{legend.Invalid.tooltip}}">
+            <span class="legend-item box status-Invalid p-x-1">{{legend.Invalid.box}}</span>
+            {{legend.Invalid.label}}
+          </li>
+          <li class="nav-item" data-toggle="tooltip" data-placement="bottom" title="{{legend.Timeout.tooltip}}">
+            <span class="legend-item box status-Timeout p-x-1">{{legend.Timeout.box}}</span>
+            {{legend.Timeout.label}}
+          </li>
+          <li class="nav-item" data-toggle="tooltip" data-placement="bottom" title="{{legend.blink.tooltip.part1}} {{legend.blink.threshold}} {{legend.blink.tooltip.part2}}">{{legend.blink.label}}</li>
+        </ul>
+      </div><!-- col -->
+    </div><!-- row -->
+  </div><!-- container -->
+</nav><!-- navbar -->

@@ -1,0 +1,37 @@
+<div id="{{name}}" class="col-sm-1 subject-group">
+  <table class="table table-sm table-inverse table-bordered">
+    <thead>
+      <tr class="bg-primary">
+        {{#if shortName}}
+          <th class="subject text-xs-center text-nowrap" colspan="{{columnCount}}" data-subject-id="{{name}}" style="font-weight: normal">{{shortName}}</th>
+        {{else}}
+          <th class="text-xs-center text-nowrap" colspan="{{columnCount}}" data-subject-id="{{name}}" style="font-weight: normal">&nbsp;</th>
+        {{/if}}
+      </tr>
+      <tr class="thead-inverse">
+        <th></th>
+        {{#each headings}}
+          <th id="{{absolutePath}}" class="subject text-xs-center" data-subject-id="{{absolutePath}}" style="font-weight: normal">{{name}}</th>
+        {{/each}}
+      </tr>
+    </thead>
+    <tbody style="font-size: smaller;">
+      {{#each rows}}
+        <tr id="{{id}}">
+          <th class="text-nowrap" scope="row" style="font-weight: normal">{{aspect}}</th>
+          {{#each columns}}
+            {{#if status}}
+              {{#if shouldBlink}}
+                <td class="sample text-xs-center status-{{status}} blink blink-{{status}}" data-sample-id="{{id}}" id="{{id}}">{{contents}}</td>
+              {{else}}
+                <td class="sample text-xs-center status-{{status}}" data-sample-id="{{id}}" id="{{id}}">{{contents}}</td>
+              {{/if}}
+            {{else}}
+              <td class="status-" data-sample-id="{{id}}" id="{{id}}"></td>
+            {{/if}}
+          {{/each}}
+        </tr>
+      {{/each}}
+    </tbody>
+  </table>
+</div>

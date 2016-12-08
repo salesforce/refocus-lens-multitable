@@ -1,0 +1,77 @@
+body {
+  background-color: #212121 !important;
+  color: #fff !important;
+}
+
+.subject-group {
+  padding-left: 6px !important;
+  padding-right: 6px !important;
+  padding-top: 12px !important;
+}
+
+.fixed-column-width {
+  width: 80px !important;
+  min-width: 80px !important;
+  max-width: 80px !important;
+  overflow-x: hidden;
+}
+
+.aspect,
+.sample,
+.subject {
+  cursor: pointer;
+}
+
+.legend-item {
+  margin-right: 4px;
+}
+
+.status-Critical {
+  background-color: #d9534f;
+  color: #fff;
+}
+.status-Info {
+  background-color: #0275d8;
+  color: #fff;
+}
+.status-Invalid,
+.status-Timeout {
+  background-color: #5d6265;
+  color: #a2a7a9;
+  font-style: italic;
+  font-weight: normal !important;
+}
+.status-OK {
+  background-color: #5cb85c;
+  color: #fff;
+}
+.status-Warning {
+  background-color: #f0ad4e;
+  color: #fff;
+}
+.status- {
+  background-color: #212121;
+}
+
+.tag {
+  background-color: transparent !important;
+  border: solid 1px #bbbbbb !important;
+  color: #ffffff !important;
+  font-weight: normal !important;
+}
+
+.blink {
+  animation-duration: 500ms;
+  animation-iteration-count: infinite;
+  animation-direction: alternate-reverse;
+  animation-name: alternateColors;
+}
+
+.perspective-spacing {
+	margin-left: 295px;
+}
+
+@keyframes alternateColors {
+  from { background-color: #000; }
+  to { background-color: null; }
+}

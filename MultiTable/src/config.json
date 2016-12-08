@@ -1,0 +1,82 @@
+{
+  "awesome": {
+    "heading": "Awesome!",
+    "text": "Everything is OK right now."
+  },
+  "blinkerCheckIntervalMillis": 25000,
+  "blinkIfNewStatusThresholdMillis": 180000,
+  "cell": {
+    "Timeout": "Zzz",
+    "Invalid": "Error"
+  },
+  "dateFormatString": "MMM D YYYY, h:mm:ss A z",
+  "modal": {
+    "sample": {
+      "close": {
+        "label": "Close"
+      },
+      "heading": {
+        "description": "Aspect Description",
+        "lastUpdated": "Last Updated",
+        "message": "Message",
+        "relatedLinks": "Related Links",
+        "status": "Status",
+        "tags": "Aspect Tags"
+      }
+    },
+    "subject": {
+      "close": {
+        "label": "Close"
+      },
+      "heading": {
+        "description": "Description",
+        "lastUpdated": "Last Updated",
+        "relatedLinks": "Related Links",
+        "tags": "Tags"
+      }
+    }
+  },
+  "pageHeader": {
+    "lastUpdated": {
+      "label": "Last updated"
+    },
+    "legend": {
+      "blink": {
+        "label": "blink = Recent Status Change",
+        "tooltip": {
+          "part1": "Blinks if the status changed in the last",
+          "part2": "minutes."
+        }
+      },
+      "Critical": {
+        "label": "Critical"
+      },
+      "Info": {
+        "label": "Info"
+      },
+      "Invalid": {
+        "box": "Error",
+        "label": "Invalid",
+        "tooltip": "The aspect does not map the current value to a status."
+      },
+      "OK": {
+        "label": "OK"
+      },
+      "Timeout": {
+        "box": "Zzz",
+        "label": "Timeout",
+        "tooltip": "No update was received within the timeout period specified for the aspect."
+      },
+      "Warning": {
+        "label": "Warning"
+      }
+    },
+    "showAll": {
+      "label": "Show even if status is OK"
+    }
+  },
+  "progress": {
+    "heading": "Loading...",
+    "label": "Loading..."
+  }
+}

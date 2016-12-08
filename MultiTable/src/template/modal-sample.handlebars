@@ -1,0 +1,53 @@
+<div class="modal-dialog modal-lg" role="document">
+  <div class="modal-content bg-inverse">
+    <div class="modal-header">
+      <button type="button" class="close bg-inverse" data-dismiss="modal" aria-label="{{close.label}}"><span aria-hidden="true">&times;</span></button>
+      <h4 class="modal-title">{{data.name}}</h4>
+    </div><!-- modal-header -->
+    <div class="modal-body">
+      <div class="container-fluid">
+        <div class="row">
+          <div class="col-xs-8"><!-- Left Column -->
+            <h5>{{heading.tags}}</h5>
+            <p>
+              {{#if data.aspect.tags}}
+                {{#each data.aspect.tags}}
+                  <span style="margin-right: 8px;"
+                    class="label label-pill label-default tag">
+                    {{this}}
+                  </span>
+                {{else}}{{/each}}
+              {{/if}}
+            </p>
+            <h5>{{heading.lastUpdated}}</h5>
+            <p>{{data.updatedAtFormatted}}</p>
+            <h5>{{heading.status}}</h5>
+            <p>
+              <span class="box status-{{data.status}}">&nbsp;</span>
+              <span>{{data.status}}</span>
+              <span class="small">since {{data.statusChangedAtFormatted}}</span>
+            </p>
+            <h5>{{heading.message}}</h5>
+            <p>
+              {{data.messageCode}}{{#if data.messageBody}}{{#if data.messageCode}}:{{/if}}
+                {{multiline data.messageBody}}
+              {{/if}}
+            </p>
+            <h5>{{heading.description}}</h5>
+            <p>{{data.aspect.description}}</p>
+          </div><!-- col-xs-8 -->
+          <div class="col-xs-4"><!-- Right Column -->
+            <h5>{{heading.relatedLinks}}</h5>
+            <div class="list-group">
+              {{#if data.relatedLinks}}
+                {{#each data.relatedLinks}}
+                  <a class="list-group-item" target="_blank" style="padding: .25rem 0.75rem" href="{{url}}">{{name}}</a>
+                {{else}}{{/each}}
+              {{/if}}
+            </div>
+          </div><!-- col-xs-4 -->
+        </div><!-- row -->
+      </div><!-- container -->
+    </div><!-- modal-body -->
+  </div><!-- modal-content -->
+</div><!-- modal-dialog -->
