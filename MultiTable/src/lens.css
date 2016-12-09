@@ -75,3 +75,31 @@ body {
   from { background-color: #000; }
   to { background-color: null; }
 }
+
+#modal-aspect p.empty {
+  height: 1em;
+}
+
+#modal-aspect .list-group.help {
+  margin-bottom: 1em;
+}
+
+#modal-aspect .list-group-item {
+  padding: .25rem .75rem;
+}
+
+#modal-aspect span.list-group-item {
+  background-color: inherit;
+  border-color: #ccc;
+}
+
+
+#modal-aspect table.ranges {
+    width: auto;
+    font-size: inherit;
+}
+
+#modal-aspect table.ranges td,
+#modal-aspect table.ranges th {
+  text-align: center;
+}
