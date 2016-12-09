@@ -1,0 +1,81 @@
+<div class="modal-dialog modal-lg" role="document">
+  <div class="modal-content bg-inverse">
+
+    <div class="modal-header">
+      <button type="button" class="close bg-inverse" data-dismiss="modal" aria-label="{{close.label}}"><span aria-hidden="true">&times;</span></button>
+      <h4 class="modal-title">{{data.name}}</h4>
+    </div><!-- modal-header -->
+
+    <div class="modal-body">
+      <div class="container-fluid">
+        <div class="row">
+          <div class="col-xs-8"><!-- Left Column -->
+            <h5>{{heading.tags}}</h5>
+            <p>
+              {{#if data.tags}}
+                {{#each data.tags}}
+                  <span style="margin-right: 8px;" class="label label-pill label-default tag">{{this}}</span>
+                {{/each}}
+              {{/if}}
+            </p>
+
+            <h5>{{heading.description}}</h5>
+            <p>{{data.description}}</p>
+
+            <h5>{{heading.valueType}}</h5>
+            <p>{{data.valueType}}</p>
+
+            <h5>{{heading.valueLabel}}</h5>
+            {{#if data.valueLabel}}
+              <p>{{data.valueLabel}}</p>
+            {{else}}
+              <p class="empty"></p>
+            {{/if}}
+
+            <h5>{{heading.statusAssignment}}</h5>
+            <table class="ranges table text-center">
+              <tr>
+                <th>{{heading.criticalRange}}</th>
+                <th>{{heading.warningRange}}</th>
+                <th>{{heading.infoRange}}</th>
+                <th>{{heading.okRange}}</th>
+              </tr>
+              <tr>
+                <td>{{flattenRange data.criticalRange}}</td>
+                <td>{{flattenRange data.warningRange}}</td>
+                <td>{{flattenRange data.infoRange}}</td>
+                <td>{{flattenRange data.okRange}}</td>
+              </tr>
+            </table>
+          </div><!-- col-xs-8 -->
+
+          <div class="col-xs-4"><!-- Right Column -->
+            <h5>{{heading.help}}</h5>
+            <div class="list-group help">
+              {{#if data.helpUrl}}
+                <a class="list-group-item" target="_blank" href="{{data.helpUrl}}">{{text.url}}</a>
+              {{else}}
+                <span class="list-group-item">{{text.url}}</span>
+              {{/if}}
+              {{#if data.helpEmail}}
+                <a class="list-group-item" target="_blank" href="mailto:{{data.helpEmail}}">{{text.email}}</a>
+              {{else}}
+                <span class="list-group-item">{{text.email}}</span>
+              {{/if}}
+            </div>
+
+            <h5>{{heading.relatedLinks}}</h5>
+            <div class="list-group related-links">
+              {{#if data.relatedLinks}}
+                {{#each data.relatedLinks}}
+                  <a class="list-group-item" target="_blank" href="{{url}}">{{name}}</a>
+                {{/each}}
+              {{/if}}
+            </div>
+          </div><!-- col-xs-4 -->
+
+        </div><!-- row -->
+      </div><!-- container -->
+    </div><!-- modal-body -->
+  </div><!-- modal-content -->
+</div><!-- modal-dialog -->

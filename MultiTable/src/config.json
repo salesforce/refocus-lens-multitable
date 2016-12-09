@@ -34,6 +34,28 @@
         "relatedLinks": "Related Links",
         "tags": "Tags"
       }
+    },
+    "aspect": {
+      "close": {
+        "label": "Close"
+      },
+      "text": {
+        "url": "URL",
+        "email": "Email"
+      },
+      "heading": {
+        "description": "Description",
+        "help": "Help",
+        "relatedLinks": "Related Links",
+        "tags": "Tags",
+        "valueType": "Value Type",
+        "valueLabel": "Value Label",
+        "statusAssignment": "Status Assignment",
+        "criticalRange": "Critical",
+        "warningRange": "Warning",
+        "infoRange": "Info",
+        "okRange": "OK"
+      }
     }
   },
   "pageHeader": {
