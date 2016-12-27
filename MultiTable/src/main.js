@@ -252,8 +252,8 @@ function setAspectListeners(subjectGroup) {
   const aspectElements = document.getElementById(subjectGroup.name)
                                  .querySelectorAll('.aspect');
   let aspectObjects = new Map();
-  let samples = Object.values(subjectGroup.samples);
-  samples.forEach((sample) => {
+  Object.keys(subjectGroup.samples).forEach((key) => {
+    const sample = subjectGroup.samples[key];
     aspectObjects.set(sample.aspect.name, sample.aspect);
   });
 

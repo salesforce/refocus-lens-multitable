@@ -4,7 +4,7 @@
   "helpEmail": "igoldstein@salesforce.com",
   "helpUrl": "https://github.com/salesforce/refocus-lens-multitable",
   "license": "TBD",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "releaseNotes": {
     "0.0.2": "Add more fields to the contents of the Sample modal.",
     "0.0.3": "Use handlebars templates; move external libraries to /lib",
@@ -16,6 +16,7 @@
     "0.0.9": "Oops... fix date display page header",
     "0.0.10": "Handle show-all checkbox before load",
     "1.0.0": "Aspect modals",
-    "1.0.1": "Fix two Uncaught TypeErrors"
+    "1.0.1": "Fix two Uncaught TypeErrors",
+    "1.0.2": "Don't use experimental Object.values(...)"
   }
 }
