@@ -181,6 +181,10 @@ function doDraw(evt) {
 } // doDraw
 
 function preparePanelsToDraw() {
+  if (!data) {
+    return [];
+  }
+
   return data.getPanelsToDraw().map((subjectGroup) => {
     const ctx = subjectGroup.tableContext(data.rootSubject);
     return {
