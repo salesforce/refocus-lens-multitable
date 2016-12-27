@@ -127,6 +127,7 @@ module.exports = class SubjectGroup {
 
   tableContext(rootSubject) {
     const sbj = Array.from(this.subjectsToShow)
+      .filter((s) => this.subjects[s.toLowerCase()])
       .sort(ascendingCaseInsensitive);
     const headings = sbj.map((s) => {
       return {
