@@ -43,7 +43,10 @@ function onSubjectRemove(data, subject) {
   // console.log(new Date(), 'onSubjectRemove', subject);
   if (SubjectUtils.isUnderRootSubject(subject, data.rootSubject)) {
     const n = SubjectGroups.groupName(subject.absolutePath);
-    data.getSubjectGroup(n).removeSubject(subject);
+    const gr = data.getSubjectGroup(n);
+    if (gr) {
+      gr.removeSubject(subject);
+    }
   }
 }
 
