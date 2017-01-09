@@ -149,7 +149,7 @@ module.exports = class SubjectGroup {
           'Critical': sample.messageCode || '',
           'Warning': sample.messageCode || '',
           'Info': sample.messageCode || '',
-          'OK': '',
+          'OK': sample.messageCode || '',
           'Timeout': conf.cell.Timeout,
           'Invalid': conf.cell.Invalid,
         }[sample.status] || '';
