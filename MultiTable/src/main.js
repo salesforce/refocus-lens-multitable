@@ -43,6 +43,7 @@ let mt;
 let sampleModal;
 let subjectModal;
 let aspectModal;
+let urlParams = {};
 
 LENS.addEventListener('refocus.lens.load', () => {
   LENS.addEventListener('refocus.lens.hierarchyLoad', onHierarchyLoad);
@@ -52,12 +53,23 @@ LENS.addEventListener('refocus.lens.load', () => {
   document.getElementById('errorInfo').setAttribute('hidden', 'true');
   LENS.className = LENS.className + ' container-fluid';
 
+  // Parse the url parameters
+  let query = window.location.search;
+  let params = query.replace('?', '').split('&');
+  params.forEach((param) => {
+    let [key, value] = param.split('=');
+    if (key === 'showAll')
+      value = (value === 'true');
+    urlParams[key] = value;
+  });
+
   // Add page header to the page
   const ph = conf.pageHeader;
   lastUpdatedMoment = moment.tz([], moment.tz.guess());
   ph.lastUpdated.date = lastUpdatedMoment.format(conf.dateFormatString);
   ph.lastUpdated.relative = lastUpdatedMoment.fromNow();
   ph.legend.blink.threshold = conf.blinkIfNewStatusThresholdMillis / 60000;
+  ph.showAll.checked = urlParams.showAll;
   LENS.insertAdjacentHTML('beforeend', template.pageHeader(ph));
   lastUpdatedAt = document.getElementById('last-updated-at');
   lastUpdatedAtRelative = document.getElementById('last-updated-at-relative');

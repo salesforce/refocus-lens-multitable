@@ -5,7 +5,7 @@
         <ul class="nav navbar-nav pull-xs-right" style="font-size: smaller">
           <li class="nav-item m-r-1">
             <label>
-              <input id="toggle-show-all" type="checkbox"/>
+              <input id="toggle-show-all" type="checkbox" {{#if showAll.checked}} checked="checked" {{/if}}/>
               {{showAll.label}}
             </label>
           </li>
