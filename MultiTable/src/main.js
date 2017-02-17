@@ -48,7 +48,8 @@ let urlParams = {};
 LENS.addEventListener('refocus.lens.load', () => {
   LENS.addEventListener('refocus.lens.hierarchyLoad', onHierarchyLoad);
   LENS.addEventListener('refocus.lens.realtime.change', onRealtimeChange);
-  LENS.addEventListener('draw', doDraw);
+  LENS.addEventListener('draw', onDraw);
+  window.addEventListener('resize', onResize); // should this be in onHierarchyLoad?
   window.setInterval(() => blinkChecker, conf.blinkerCheckIntervalMillis);
   document.getElementById('errorInfo').setAttribute('hidden', 'true');
   LENS.className = LENS.className + ' container-fluid';
@@ -158,8 +159,8 @@ function blinkChecker() {
   const blinkers = mt.querySelectorAll('.blink');
   for (let i = 0; i < blinkers.length; i++) {
     const cell = blinkers[i];
-    const n = SubjectGroups.groupName(cell.id);
-    const sample = data.getSubjectGroup(n).samples[cell.id.toLowerCase()];
+    const sample = data.getGroupForAbsolutePath(cell.id)
+                   .samples[cell.id.toLowerCase()];
     if (sample && SampleUtils.statusChangedRecently(sample,
       conf.blinkIfNewStatusThresholdMillis)) {
       cell.className = cell.className.replace(/blink blink-\w+/, '');
@@ -168,16 +169,38 @@ function blinkChecker() {
 } // blinkChecker
 
 function enqueueDrawEvent() {
-  LENS.dispatchEvent(new CustomEvent('draw', {
-    detail: preparePanelsToDraw(),
-  }));
+  LENS.dispatchEvent(new CustomEvent('draw'));
 }
+
+function onDraw() {
+  doDraw();
+  splitAndDraw();
+} // onDraw
+
+let resizeWaiting = false;
+function onResize() {
+  if (resizeWaiting) return;
+  resizeWaiting = true;
+  setTimeout(() => {
+    splitAndDraw();
+    resizeWaiting = false;
+  }, 50);
+} // onResize
+
+function splitAndDraw() {
+  splitOverflowingGroups() && doDraw();
+  if (scrollbarToggled) {
+    splitOverflowingGroups() && doDraw();
+  }
+} // splitAndDraw
 
 /**
  * This function modifies the DOM.
  */
-function doDraw(evt) {
-  const panels = evt.detail;
+let scrollbarToggled;
+function doDraw() {
+  const widthBeforeDraw = mt.clientWidth;
+  const panels = preparePanelsToDraw();
   mt.innerHTML = '';
   if (panels.length) {
     awesome.setAttribute('hidden', true);
@@ -190,6 +213,9 @@ function doDraw(evt) {
   } else {
     awesome.removeAttribute('hidden');
   }
+
+  const widthAfterDraw = mt.clientWidth;
+  scrollbarToggled = (widthAfterDraw != widthBeforeDraw);
 } // doDraw
 
 function preparePanelsToDraw() {
@@ -202,7 +228,7 @@ function preparePanelsToDraw() {
     return {
       subjectGroup: subjectGroup,
       template: template.subjectGroup(ctx),
-    }
+    };
   });
 } // getPanelsToDraw
 
@@ -214,7 +240,7 @@ function bindContentToModal(modal, modalTemplate, context, content) {
 } // bindContentToModal
 
 function setSampleListeners(subjectGroup) {
-  const samples = document.getElementById(subjectGroup.name)
+  const samples = document.getElementById(subjectGroup.key)
     .querySelectorAll('.sample');
   samples.forEach((sample) => {
     sample.addEventListener('click', (evt) => {
@@ -229,6 +255,7 @@ function setSampleListeners(subjectGroup) {
       if (s.relatedLinks && s.relatedLinks.length > 1) {
         s.relatedLinks.sort(Utils.sort);
       }
+
       bindContentToModal(sampleModal, template.sampleModal,
         conf.modal.sample, s);
       $('#modal-sample').modal(); // open the modal
@@ -237,7 +264,7 @@ function setSampleListeners(subjectGroup) {
 } // setSampleListeners
 
 function setSubjectListeners(subjectGroup) {
-  const subjects = document.getElementById(subjectGroup.name)
+  const subjects = document.getElementById(subjectGroup.key)
     .querySelectorAll('.subject');
   subjects.forEach((subject) => {
     subject.addEventListener('click', (evt) => {
@@ -253,6 +280,7 @@ function setSubjectListeners(subjectGroup) {
       if (s.relatedLinks && s.relatedLinks.length > 1) {
         s.relatedLinks.sort(Utils.sortByNameAscending);
       }
+
       bindContentToModal(subjectModal, template.subjectModal,
         conf.modal.subject, s);
       $('#modal-subject').modal(); // open the modal
@@ -261,7 +289,7 @@ function setSubjectListeners(subjectGroup) {
 } // setSubjectListeners
 
 function setAspectListeners(subjectGroup) {
-  const aspectElements = document.getElementById(subjectGroup.name)
+  const aspectElements = document.getElementById(subjectGroup.key)
                                  .querySelectorAll('.aspect');
   let aspectObjects = new Map();
   Object.keys(subjectGroup.samples).forEach((key) => {
@@ -282,12 +310,12 @@ function setAspectListeners(subjectGroup) {
       bindContentToModal(aspectModal, template.aspectModal,
         conf.modal.aspect, aspect);
       $('#modal-aspect').modal(); // open the modal
-      
+
     });
   });
 } // setAspectListeners
 
-handlebars.registerHelper('flattenRange', function(range) {
+handlebars.registerHelper('flattenRange', function (range) {
   if (range == null) {
     return null;
   } else if (range[0] == range[1]) {
@@ -296,3 +324,61 @@ handlebars.registerHelper('flattenRange', function(range) {
     return range[0] + ' - ' + range[1];
   }
 });
+
+function splitOverflowingGroups() {
+  const containerWidth = mt.clientWidth;
+  let changed = false;
+  let groupList = data.getSortedGroupList();
+
+  for (const thisGroup of groupList) {
+    const DOMGroup = document.getElementsByClassName('subject-group-' + thisGroup.name)[0];
+    const notOverflowing = !thisGroup.split && ($(DOMGroup).outerWidth() < containerWidth);
+    if (notOverflowing || !DOMGroup) continue;
+
+    const aspectWidth = $(DOMGroup).find('th.aspect').outerWidth();
+    const padding = $(DOMGroup).outerWidth() - $(DOMGroup).width();
+    let groupWidth = aspectWidth + padding;
+
+    let nextGroup = data.getNextGroup(thisGroup);
+    thisGroup.reset();
+
+    // search for overflowing subjects and move them to the next group
+    for (const subject of thisGroup.getSortedSubjectList()) {
+      const DOMSubject = document.getElementById(subject.absolutePath);
+      const subjectWidth = (DOMSubject ? DOMSubject.getBoundingClientRect().width : 0);
+      groupWidth += subjectWidth;
+      if (groupWidth >= containerWidth) {
+        if (!nextGroup) {
+          nextGroup = data.splitSubjectGroup(thisGroup);
+          groupList.push(nextGroup);
+        }
+
+        data.moveSubject(subject, thisGroup, nextGroup);
+        changed = true;
+      }
+    }
+
+    // search for subjects in the following groups that can be moved back to this group
+    while (nextGroup) {
+      for (const subject of nextGroup.getSortedSubjectList()) {
+        const DOMSubject = document.getElementById(subject.absolutePath);
+        const subjectWidth = (DOMSubject ? DOMSubject.getBoundingClientRect().width : 0);
+        const extraSpace = containerWidth - groupWidth;
+        if (subjectWidth < extraSpace) {
+          data.moveSubject(subject, nextGroup, thisGroup);
+          changed = true;
+          groupWidth += subjectWidth;
+        } else {
+          nextGroup = null;
+          break;
+        }
+      }
+
+      nextGroup = data.getNextGroup(nextGroup);
+    }
+
+  }
+
+  data.removeEmptyGroups();
+  return changed;
+}

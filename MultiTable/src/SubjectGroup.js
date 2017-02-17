@@ -27,18 +27,22 @@ function ascendingCaseInsensitive(a, b) {
  *                         columns
  */
 module.exports = class SubjectGroup {
-  constructor(name, subject) {
+  constructor(name, subject, showAll=false, splitNum) {
     this.name = name;
+    this.splitNum = splitNum;
+    this.split = (splitNum != null);
     this.self = subject;
-    this.showAll = false;
+    this.showAll = showAll;
     this.samples = {};
     this.subjects = {};
     this.aspectsToShow = new Set();
     this.subjectsToShow = new Set();
+    this.key = name.toLowerCase();
+    if (this.split) this.key += `-${splitNum}`;
   }
 
   static hasAspectsAndSubjectsToShow(sg) {
-    sg.reset(sg.showAll);
+    sg.reset();
     return sg.aspectsToShow.size > 0 && sg.subjectsToShow.size > 0;
   }
 
@@ -99,7 +103,7 @@ module.exports = class SubjectGroup {
    *  and subjects (columns) for samples with status=OK
    */
   reset(showAll) {
-    this.showAll = showAll;
+    if (showAll != null) this.showAll = showAll;
     this.aspectsToShow = new Set();
     this.subjectsToShow = new Set();
     d3c.values(this.samples)
@@ -125,33 +129,36 @@ module.exports = class SubjectGroup {
     delete this.samples[s.name.toLowerCase()];
   }
 
+  getSubjectForSample(sample) {
+    const subjectPath = sample.name.split('|')[0].toLowerCase();
+    return this.subjects[subjectPath];
+  }
+
   tableContext(rootSubject) {
-    const sbj = Array.from(this.subjectsToShow)
-      .filter((s) => this.subjects[s.toLowerCase()])
-      .sort(ascendingCaseInsensitive);
-    const headings = sbj.map((s) => {
-      return {
-        absolutePath: this.subjects[s.toLowerCase()].absolutePath,
-        name: this.subjects[s.toLowerCase()].name,
+    const sbj = this.getSubjectsToShow();
+    const headings = sbj.map((s) => (
+      {
+        absolutePath: s.absolutePath,
+        name: s.name,
       }
-    });
+    ));
     const asp = Array.from(this.aspectsToShow)
       .sort(ascendingCaseInsensitive);
     const rows = asp.map((a) => {
       const columns = sbj.map((s) => {
-        const id = `${s}|${a}`;
+        const id = `${s.absolutePath}|${a}`;
         const sample = this.samples[id.toLowerCase()] || {
           isFake: true,
           messageCode: '',
           status: '',
         };
         const contents = {
-          'Critical': sample.messageCode || '',
-          'Warning': sample.messageCode || '',
-          'Info': sample.messageCode || '',
-          'OK': sample.messageCode || '',
-          'Timeout': conf.cell.Timeout,
-          'Invalid': conf.cell.Invalid,
+          Critical: sample.messageCode || '',
+          Warning: sample.messageCode || '',
+          Info: sample.messageCode || '',
+          OK: sample.messageCode || '',
+          Timeout: conf.cell.Timeout,
+          Invalid: conf.cell.Invalid,
         }[sample.status] || '';
         return {
           contents,
@@ -165,7 +172,7 @@ module.exports = class SubjectGroup {
       return {
         aspect: a,
         columns,
-        id: `${this.name}|${a}`,
+        id: `${this.key}|${a}`,
       };
     });
     let shortName;
@@ -185,10 +192,28 @@ module.exports = class SubjectGroup {
       name: this.name,
       rows,
       shortName,
+      key: this.key,
     };
   }
 
+  getSubjectsToShow() {
+    return Array.from(this.subjectsToShow)
+             .sort(ascendingCaseInsensitive)
+             .map(s => this.subjects[s.toLowerCase()])
+             .filter(s => s);
+  }
+
+  getSortedSubjectList() {
+    return Object.keys(this.subjects)
+      .sort(ascendingCaseInsensitive)
+      .map(s => this.subjects[s]);
+  }
+
   static nameSorter(a, b) {
-    return d3a.ascending(a.name.toLowerCase(), b.name.toLowerCase());
+    if (a.name === b.name) {
+      return a.splitNum - b.splitNum;
+    } else {
+      return d3a.ascending(a.name, b.name);
+    }
   }
 };

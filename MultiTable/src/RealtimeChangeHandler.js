@@ -6,9 +6,11 @@ const SubjectUtils = require('./SubjectUtils');
 function onSampleAdd(data, sample) {
   // console.log(new Date(), 'onSampleAdd', sample);
   if (SampleUtils.isUnderRootSubject(sample, data.rootSubject)) {
-    const n = SubjectGroups.groupName(sample.name);
-    if (data.hasSubjectGroup(n)) {
-      data.getSubjectGroup(n).addSample(sample);
+    const subjectGroup = data.getGroupForAbsolutePath(sample.name);
+    if (subjectGroup) {
+      subjectGroup.addSample(sample);
+      const subject = subjectGroup.getSubjectForSample(sample);
+      subject.samples.push(sample);
     }
   }
 }
@@ -16,9 +18,12 @@ function onSampleAdd(data, sample) {
 function onSampleRemove(data, sample) {
   // console.log(new Date(), 'onSampleRemove', sample);
   if (SampleUtils.isUnderRootSubject(sample, data.rootSubject)) {
-    const n = SubjectGroups.groupName(sample.name);
-    if (data.hasSubjectGroup(n)) {
-      data.getSubjectGroup(n).removeSample(sample);
+    const subjectGroup = data.getGroupForAbsolutePath(sample.name);
+    if (subjectGroup) {
+      subjectGroup.removeSample(sample);
+      const subject = subjectGroup.getSubjectForSample(sample);
+      const index = subject.samples.findIndex(s => (s.name === sample.name));
+      subject.samples.splice(index, 1);
     }
   }
 }
@@ -26,9 +31,12 @@ function onSampleRemove(data, sample) {
 function onSampleUpdate(data, change) {
   // console.log(new Date(), 'onSampleUpdate', change);
   if (SampleUtils.isUnderRootSubject(change, data.rootSubject)) {
-    const n = SubjectGroups.groupName(change.name);
-    if (data.hasSubjectGroup(n)) {
-      data.getSubjectGroup(n).updateSample(change);
+    const subjectGroup = data.getGroupForAbsolutePath(change.name);
+    if (subjectGroup) {
+      subjectGroup.updateSample(change);
+      const subject = subjectGroup.getSubjectForSample(change);
+      const index = subject.samples.findIndex(s => (s.name === change.name));
+      subject.samples[index] = change;
     }
   }
 }
@@ -36,10 +44,11 @@ function onSampleUpdate(data, change) {
 function onSubjectAdd(data, subject) {
   // console.log(new Date(), 'onSubjectAdd', subject);
   if (SubjectUtils.isUnderRootSubject(subject, data.rootSubject)) {
-    const n = SubjectGroups.groupName(subject.absolutePath);
-    if (data.hasSubjectGroup(n)) {
-      data.getSubjectGroup(n).addSubject(subject);
+    const subjectGroup = data.findGroupForNewSubject(subject);
+    if (subjectGroup) {
+      data.addSubject(subjectGroup, subject);
     } else {
+      const n = SubjectGroups.groupName(subject.absolutePath);
       data.addSubjectGroup(n, subject);
     }
   }
@@ -48,9 +57,9 @@ function onSubjectAdd(data, subject) {
 function onSubjectRemove(data, subject) {
   // console.log(new Date(), 'onSubjectRemove', subject);
   if (SubjectUtils.isUnderRootSubject(subject, data.rootSubject)) {
-    const n = SubjectGroups.groupName(subject.absolutePath);
-    if (data.hasSubjectGroup(n)) {
-      data.getSubjectGroup(n).removeSubject(subject);
+    const subjectGroup = data.getGroupForAbsolutePath(subject.absolutePath);
+    if (subjectGroup) {
+      data.removeSubject(subjectGroup, subject);
     }
   }
 }
@@ -58,9 +67,9 @@ function onSubjectRemove(data, subject) {
 function onSubjectUpdate(data, change) {
   // console.log(new Date(), 'onSubjectUpdate', change);
   if (SubjectUtils.isUnderRootSubject(change, data.rootSubject)) {
-    const n = SubjectGroups.groupName(change.absolutePath);
-    if (data.hasSubjectGroup(n)) {
-      data.getSubjectGroup(n).updateSubject(change);
+    const subjectGroup = data.getGroupForAbsolutePath(change.absolutePath);
+    if (subjectGroup) {
+      subjectGroup.updateSubject(change);
     }
   }
 }
@@ -85,4 +94,4 @@ module.exports = class RealtimeChangeHandler {
     }
   }
 
-} // module.exports
+}; // module.exports

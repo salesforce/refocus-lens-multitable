@@ -29,6 +29,7 @@ function jsonToSubjectGroups(json) {
       groups[grpName.toLowerCase()] = new SubjectGroup(grpName,
         inv.subjects[grpName.toLowerCase()]);
     }
+
     groups[grpName.toLowerCase()].addSubject(s);
   });
 
@@ -60,6 +61,7 @@ module.exports = class SubjectGroups {
   constructor(jsonHierarchy) {
     this.map = jsonToSubjectGroups(jsonHierarchy);
     this.rootSubject = jsonHierarchy.absolutePath;
+    this.splitGroupMap = {};
   } // constructor
 
   reset(showAll) {
@@ -76,16 +78,92 @@ module.exports = class SubjectGroups {
     return panelsToShow;
   } // getPanelsToDraw
 
-  getSubjectGroup(key) {
-    return this.map[key.toLowerCase()];
-  } // getSubjectGroup
+  getSortedGroupList() {
+    return Object.values(this.map).sort(SubjectGroup.nameSorter);
+  } // getSortedGroupList
 
-  hasSubjectGroup(key) {
-    return d3c.keys(this.map).includes(key.toLowerCase());
-  } // hasSubjectGroup
+  getNextGroup(group) {
+    if (!group || !group.split) return null;
+    const nextGroupNum = group.splitNum + 1;
+    const key = group.name.toLowerCase() + '-' + nextGroupNum;
+    return this.map[key];
+  } // getNextGroup
 
-  addSubjectGroup(name, subject) {
-    this.map[name.toLowerCase()] = new SubjectGroup(name, subject);
+  getGroupForAbsolutePath(absolutePath) {
+    absolutePath = absolutePath.toLowerCase().split('|')[0];
+    const splitGroup = this.splitGroupMap[absolutePath];
+    const normalGroup = this.map[deriveGroupName(absolutePath)];
+    return splitGroup || normalGroup;
+  } // getGroupForAbsolutePath
+
+  findGroupForNewSubject(subjectToAdd) {
+    const groupName = deriveGroupName(subjectToAdd.absolutePath);
+    const groups = this.getSortedGroupList().filter(g => (g.name === groupName));
+    let group = this.map[groupName];
+    if (group) return group;
+    for (group of groups) {
+      const lastInGroup = group.getSortedSubjectList().pop();
+      const comparison = Utils.sortByNameAscending(subjectToAdd, lastInGroup);
+      if (comparison <= 0) break;
+    }
+
+    return group;
+  } // findGroupForNewSubject
+
+  addSubjectGroup(name, subject, showAll, splitNum) {
+    const newGroup = new SubjectGroup(name, subject, showAll, splitNum);
+    this.map[newGroup.key] = newGroup;
+    return newGroup;
   } // addSubjectGroup
 
-} // module.exports
+  splitSubjectGroup(group) {
+    if (!group.split) {
+      group.splitNum = 1;
+      group.split = true;
+      delete this.map[group.key];
+      group.key += '-1';
+      this.map[group.key] = group;
+      Object.values(group.subjects).forEach((subject) => {
+        this.trackSubject(subject, group);
+      });
+    }
+
+    const nextGroupNum = group.splitNum + 1;
+    return this.addSubjectGroup(group.name, group.self, group.showAll, nextGroupNum);
+  } // splitSubjectGroup
+
+  addSubject(group, subject) {
+    group.addSubject(subject);
+    if (group.split) {
+      this.trackSubject(subject, group);
+    }
+  } // addSubject
+
+  removeSubject(group, subject) {
+    group.removeSubject(subject);
+    if (group.split) {
+      this.trackSubject(subject, null);
+    }
+  } // removeSubject
+
+  trackSubject(subject, group) {
+    const key = subject.absolutePath.toLowerCase();
+    this.splitGroupMap[key] = group;
+  } // trackSubject
+
+  moveSubject(subject, fromGroup, toGroup) {
+    this.removeSubject(fromGroup, subject);
+    this.addSubject(toGroup, subject);
+    subject.samples.forEach((s) => {
+      fromGroup.removeSample(s);
+      toGroup.addSample(s);
+    });
+  } // moveSubject
+
+  removeEmptyGroups() {
+    Object.values(this.map)
+    .filter(group => !Object.keys(group.subjects).length)
+    .forEach(group => delete this.map[group.key]);
+  } // removeEmptyGroups
+
+}; // module.exports
