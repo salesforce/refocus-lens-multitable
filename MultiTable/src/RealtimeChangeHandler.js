@@ -44,6 +44,7 @@ function onSampleUpdate(data, change) {
 function onSubjectAdd(data, subject) {
   // console.log(new Date(), 'onSubjectAdd', subject);
   if (SubjectUtils.isUnderRootSubject(subject, data.rootSubject)) {
+    if (!subject.samples) subject.samples = [];
     const subjectGroup = data.findGroupForNewSubject(subject);
     if (subjectGroup) {
       data.addSubject(subjectGroup, subject);
@@ -67,6 +68,7 @@ function onSubjectRemove(data, subject) {
 function onSubjectUpdate(data, change) {
   // console.log(new Date(), 'onSubjectUpdate', change);
   if (SubjectUtils.isUnderRootSubject(change, data.rootSubject)) {
+    if (!change.samples) change.samples = [];
     const subjectGroup = data.getGroupForAbsolutePath(change.absolutePath);
     if (subjectGroup) {
       subjectGroup.updateSubject(change);

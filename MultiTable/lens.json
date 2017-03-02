@@ -4,7 +4,7 @@
   "helpEmail": "igoldstein@salesforce.com",
   "helpUrl": "https://github.com/salesforce/refocus-lens-multitable",
   "license": "TBD",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "releaseNotes": {
     "0.0.2": "Add more fields to the contents of the Sample modal.",
     "0.0.3": "Use handlebars templates; move external libraries to /lib",
@@ -20,6 +20,7 @@
     "1.0.2": "Don't use experimental Object.values(...)",
     "1.0.3": "Show messageCode even when status=OK",
     "1.0.4": "ShowAll url parameter",
-    "1.0.5": "Split overflowing groups"
+    "1.0.5": "Split overflowing groups",
+    "1.0.6": "Subject add bug fix"
   }
 }

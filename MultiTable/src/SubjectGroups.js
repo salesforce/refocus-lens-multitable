@@ -98,11 +98,12 @@ module.exports = class SubjectGroups {
 
   findGroupForNewSubject(subjectToAdd) {
     const groupName = deriveGroupName(subjectToAdd.absolutePath);
-    const groups = this.getSortedGroupList().filter(g => (g.name === groupName));
+    const splitGroups = this.getSortedGroupList().filter(g => (g.name === groupName));
     let group = this.map[groupName];
     if (group) return group;
-    for (group of groups) {
+    for (group of splitGroups) {
       const lastInGroup = group.getSortedSubjectList().pop();
+      if (!lastInGroup) continue;
       const comparison = Utils.sortByNameAscending(subjectToAdd, lastInGroup);
       if (comparison <= 0) break;
     }
