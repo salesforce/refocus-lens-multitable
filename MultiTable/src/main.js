@@ -291,17 +291,11 @@ function setSubjectListeners(subjectGroup) {
 function setAspectListeners(subjectGroup) {
   const aspectElements = document.getElementById(subjectGroup.key)
                                  .querySelectorAll('.aspect');
-  let aspectObjects = new Map();
-  Object.keys(subjectGroup.samples).forEach((key) => {
-    const sample = subjectGroup.samples[key];
-    aspectObjects.set(sample.aspect.name, sample.aspect);
-  });
-
   aspectElements.forEach((aspectElement) => {
     aspectElement.addEventListener('click', (evt) => {
 
       let aspectName = evt.target.innerHTML;
-      let aspect = aspectObjects.get(aspectName);
+      let aspect = subjectGroup.aspects[aspectName];
 
       if (aspect.tags && aspect.tags.length > 1) {
         aspect.tags.sort(Utils.sort);
