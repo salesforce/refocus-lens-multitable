@@ -10,6 +10,25 @@ function ascendingCaseInsensitive(a, b) {
   return d3a.ascending(a.toLowerCase(), b.toLowerCase());
 }
 
+function aspectSorter(a, b) {
+  let ret;
+  if (a.rank != null && b.rank != null) {
+    ret = a.rank - b.rank;
+  } else if (a.rank == null && b.rank == null) {
+    ret = 0;
+  } else if (a.rank == null && b.rank != null) {
+    ret = 1;
+  } else if (a.rank != null && b.rank == null) {
+    ret = -1;
+  }
+
+  if (ret === 0) {
+    ret = d3a.ascending(a.name, b.name);
+  }
+
+  return ret;
+} // aspectSorter
+
 /**
  * Data structure for the MultiTable component.
  *
@@ -35,6 +54,7 @@ module.exports = class SubjectGroup {
     this.showAll = showAll;
     this.samples = {};
     this.subjects = {};
+    this.aspects = {};
     this.aspectsToShow = new Set();
     this.subjectsToShow = new Set();
     this.key = name.toLowerCase();
@@ -66,6 +86,7 @@ module.exports = class SubjectGroup {
    */
   addSample(s) {
     this.samples[s.name.toLowerCase()] = s;
+    this.aspects[s.aspect.name] = s.aspect;
   }
 
   /**
@@ -142,11 +163,10 @@ module.exports = class SubjectGroup {
         name: s.name,
       }
     ));
-    const asp = Array.from(this.aspectsToShow)
-      .sort(ascendingCaseInsensitive);
+    const asp = this.getAspectsToShow();
     const rows = asp.map((a) => {
       const columns = sbj.map((s) => {
-        const id = `${s.absolutePath}|${a}`;
+        const id = `${s.absolutePath}|${a.name}`;
         const sample = this.samples[id.toLowerCase()] || {
           isFake: true,
           messageCode: '',
@@ -170,9 +190,9 @@ module.exports = class SubjectGroup {
         };
       });
       return {
-        aspect: a,
+        aspect: a.name,
         columns,
-        id: `${this.key}|${a}`,
+        id: `${this.key}|${a.name}`,
       };
     });
     let shortName;
@@ -201,6 +221,13 @@ module.exports = class SubjectGroup {
              .sort(ascendingCaseInsensitive)
              .map(s => this.subjects[s.toLowerCase()])
              .filter(s => s);
+  }
+
+  getAspectsToShow() {
+    return Array.from(this.aspectsToShow)
+             .map(a => this.aspects[a])
+             .filter(a => a)
+             .sort(aspectSorter);
   }
 
   getSortedSubjectList() {
