@@ -6,11 +6,9 @@ const Utils = require('./Utils');
 const SampleUtils = require('./SampleUtils');
 const SubjectUtils = require('./SubjectUtils');
 
-function subjectSorter(subject1, subject2) {
-  const string1 = subject1.sortBy || subject1.name;
-  const string2 = subject2.sortBy || subject2.name;
-  return d3a.ascending(string1.toLowerCase(), string2.toLowerCase());
-} // subjectSorter
+function ascendingCaseInsensitive(a, b) {
+  return d3a.ascending(a.toLowerCase(), b.toLowerCase());
+}
 
 function aspectSorter(a, b) {
   let ret;
@@ -220,9 +218,9 @@ module.exports = class SubjectGroup {
 
   getSubjectsToShow() {
     return Array.from(this.subjectsToShow)
+             .sort(ascendingCaseInsensitive)
              .map(s => this.subjects[s.toLowerCase()])
-             .filter(s => s)
-             .sort(subjectSorter);
+             .filter(s => s);
   }
 
   getAspectsToShow() {
@@ -233,14 +231,16 @@ module.exports = class SubjectGroup {
   }
 
   getSortedSubjectList() {
-    return Object.values(this.subjects).sort(subjectSorter);
+    return Object.keys(this.subjects)
+      .sort(ascendingCaseInsensitive)
+      .map(s => this.subjects[s]);
   }
 
   static nameSorter(a, b) {
     if (a.name === b.name) {
       return a.splitNum - b.splitNum;
     } else {
-      return subjectSorter(a, b);
+      return d3a.ascending(a.name, b.name);
     }
   }
 };
