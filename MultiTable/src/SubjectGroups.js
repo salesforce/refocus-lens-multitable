@@ -104,7 +104,7 @@ module.exports = class SubjectGroups {
     for (group of splitGroups) {
       const lastInGroup = group.getSortedSubjectList().pop();
       if (!lastInGroup) continue;
-      const comparison = Utils.sortByNameAscending(subjectToAdd, lastInGroup);
+      const comparison = SubjectGroup.subjectSorter(subjectToAdd, lastInGroup);
       if (comparison <= 0) break;
     }
 
