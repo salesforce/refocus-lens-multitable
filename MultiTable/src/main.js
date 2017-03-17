@@ -49,7 +49,7 @@ LENS.addEventListener('refocus.lens.load', () => {
   LENS.addEventListener('refocus.lens.hierarchyLoad', onHierarchyLoad);
   LENS.addEventListener('refocus.lens.realtime.change', onRealtimeChange);
   LENS.addEventListener('draw', onDraw);
-  window.addEventListener('resize', onResize); // should this be in onHierarchyLoad?
+  window.addEventListener('resize', onResize);
   window.setInterval(() => blinkChecker, conf.blinkerCheckIntervalMillis);
   document.getElementById('errorInfo').setAttribute('hidden', 'true');
   LENS.className = LENS.className + ' container-fluid';
@@ -199,6 +199,7 @@ function splitAndDraw() {
  */
 let scrollbarToggled;
 function doDraw() {
+  if (!data) return;
   const widthBeforeDraw = mt.clientWidth;
   const panels = preparePanelsToDraw();
   mt.innerHTML = '';
@@ -219,10 +220,6 @@ function doDraw() {
 } // doDraw
 
 function preparePanelsToDraw() {
-  if (!data) {
-    return [];
-  }
-
   return data.getPanelsToDraw().map((subjectGroup) => {
     const ctx = subjectGroup.tableContext(data.rootSubject);
     return {
