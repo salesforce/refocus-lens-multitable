@@ -6,11 +6,6 @@ const Utils = require('./Utils');
 const SampleUtils = require('./SampleUtils');
 const SubjectUtils = require('./SubjectUtils');
 
-function subjectSorter(subject1, subject2) {
-  const string1 = subject1.sortBy || subject1.name;
-  const string2 = subject2.sortBy || subject2.name;
-  return d3a.ascending(string1.toLowerCase(), string2.toLowerCase());
-} // subjectSorter
 
 function aspectSorter(a, b) {
   let ret;
