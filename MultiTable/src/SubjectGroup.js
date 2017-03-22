@@ -222,7 +222,7 @@ module.exports = class SubjectGroup {
     return Array.from(this.subjectsToShow)
              .map(s => this.subjects[s.toLowerCase()])
              .filter(s => s)
-             .sort(subjectSorter);
+             .sort(this.subjectSorter);
   }
 
   getAspectsToShow() {
@@ -233,14 +233,20 @@ module.exports = class SubjectGroup {
   }
 
   getSortedSubjectList() {
-    return Object.values(this.subjects).sort(subjectSorter);
+    return Object.values(this.subjects).sort(this.subjectSorter);
   }
+
+  static subjectSorter(subject1, subject2) {
+    const string1 = subject1.sortBy || subject1.name;
+    const string2 = subject2.sortBy || subject2.name;
+    return d3a.ascending(string1.toLowerCase(), string2.toLowerCase());
+  } // subjectSorter
 
   static nameSorter(a, b) {
     if (a.name === b.name) {
       return a.splitNum - b.splitNum;
     } else {
-      return subjectSorter(a, b);
+      return SubjectGroup.subjectSorter(a, b);
     }
   }
 };
