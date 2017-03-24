@@ -24,6 +24,7 @@ function jsonToSubjectGroups(json) {
 
   // Add Subjects
   d3c.values(inv.subjects).forEach((s) => {
+    if (!s.samples) s.samples = [];
     const grpName = deriveGroupName(s.absolutePath);
     if (!groups[grpName.toLowerCase()]) {
       groups[grpName.toLowerCase()] = new SubjectGroup(grpName,
