@@ -47,10 +47,6 @@ let urlParams = {};
 
 LENS.addEventListener('refocus.lens.load', () => {
   LENS.addEventListener('refocus.lens.hierarchyLoad', onHierarchyLoad);
-  LENS.addEventListener('refocus.lens.realtime.change', onRealtimeChange);
-  LENS.addEventListener('draw', onDraw);
-  window.addEventListener('resize', onResize);
-  window.setInterval(() => blinkChecker, conf.blinkerCheckIntervalMillis);
   document.getElementById('errorInfo').setAttribute('hidden', 'true');
   LENS.className = LENS.className + ' container-fluid';
 
@@ -74,15 +70,6 @@ LENS.addEventListener('refocus.lens.load', () => {
   LENS.insertAdjacentHTML('beforeend', template.pageHeader(ph));
   lastUpdatedAt = document.getElementById('last-updated-at');
   lastUpdatedAtRelative = document.getElementById('last-updated-at-relative');
-
-  // Add change listener to the "Show All" toggle
-  document.getElementById('toggle-show-all')
-  .addEventListener('change', (evt) => {
-    if (data) {
-      data.reset(evt.target.checked);
-      enqueueDrawEvent();
-    }
-  });
 
   // Add progress bar to display while waiting to receive the hierarchy.
   LENS.insertAdjacentHTML('beforeend', template.progress(conf.progress));
@@ -119,8 +106,20 @@ LENS.addEventListener('refocus.lens.load', () => {
  */
 function onHierarchyLoad(evt) {
   data = new SubjectGroups(evt.detail);
+
+  LENS.addEventListener('refocus.lens.realtime.change', onRealtimeChange);
+  LENS.addEventListener('draw', onDraw);
+  window.addEventListener('resize', onResize);
+  window.setInterval(() => blinkChecker, conf.blinkerCheckIntervalMillis);
+
   let showAll = $('#toggle-show-all').prop('checked');
   if (showAll) data.reset(showAll);
+
+  $('#toggle-show-all').change((evt) => {
+    data.reset(evt.target.checked);
+    enqueueDrawEvent();
+  });
+
   enqueueDrawEvent();
   loading.setAttribute('hidden', 'true');
 
@@ -199,7 +198,6 @@ function splitAndDraw() {
  */
 let scrollbarToggled;
 function doDraw() {
-  if (!data) return;
   const widthBeforeDraw = mt.clientWidth;
   const panels = preparePanelsToDraw();
   mt.innerHTML = '';

@@ -10,7 +10,9 @@ function onSampleAdd(data, sample) {
     if (subjectGroup) {
       subjectGroup.addSample(sample);
       const subject = subjectGroup.getSubjectForSample(sample);
-      subject.samples.push(sample);
+      if (subject) {
+        subject.samples.push(sample);
+      }
     }
   }
 }
@@ -22,8 +24,12 @@ function onSampleRemove(data, sample) {
     if (subjectGroup) {
       subjectGroup.removeSample(sample);
       const subject = subjectGroup.getSubjectForSample(sample);
-      const index = subject.samples.findIndex(s => (s.name === sample.name));
-      subject.samples.splice(index, 1);
+      if (subject) {
+        const index = subject.samples.findIndex(s => (s.name === sample.name));
+        if (index >= 0) {
+          subject.samples.splice(index, 1);
+        }
+      }
     }
   }
 }
@@ -35,8 +41,12 @@ function onSampleUpdate(data, change) {
     if (subjectGroup) {
       subjectGroup.updateSample(change);
       const subject = subjectGroup.getSubjectForSample(change);
-      const index = subject.samples.findIndex(s => (s.name === change.name));
-      subject.samples[index] = change;
+      if (subject) {
+        const index = subject.samples.findIndex(s => (s.name === change.name));
+        if (index >= 0) {
+          subject.samples[index] = change;
+        }
+      }
     }
   }
 }
