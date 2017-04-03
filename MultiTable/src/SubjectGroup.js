@@ -6,7 +6,6 @@ const Utils = require('./Utils');
 const SampleUtils = require('./SampleUtils');
 const SubjectUtils = require('./SubjectUtils');
 
-
 function aspectSorter(a, b) {
   let ret;
   if (a.rank != null && b.rank != null) {
@@ -217,7 +216,7 @@ module.exports = class SubjectGroup {
     return Array.from(this.subjectsToShow)
              .map(s => this.subjects[s.toLowerCase()])
              .filter(s => s)
-             .sort(this.subjectSorter);
+             .sort(SubjectGroup.subjectSorter);
   }
 
   getAspectsToShow() {
@@ -228,7 +227,7 @@ module.exports = class SubjectGroup {
   }
 
   getSortedSubjectList() {
-    return Object.values(this.subjects).sort(this.subjectSorter);
+    return Object.values(this.subjects).sort(SubjectGroup.subjectSorter);
   }
 
   static subjectSorter(subject1, subject2) {
