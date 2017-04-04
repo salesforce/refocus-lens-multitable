@@ -90,12 +90,17 @@ module.exports = class SubjectGroups {
     return this.map[key];
   } // getNextGroup
 
-  getGroupForAbsolutePath(absolutePath) {
+  getParentGroupForAbsolutePath(absolutePath) {
     absolutePath = absolutePath.toLowerCase().split('|')[0];
     const splitGroup = this.splitGroupMap[absolutePath];
     const normalGroup = this.map[deriveGroupName(absolutePath)];
     return splitGroup || normalGroup;
-  } // getGroupForAbsolutePath
+  } // getParentGroupForAbsolutePath
+
+  getSelfGroupsForAbsolutePath(absolutePath) {
+    absolutePath = absolutePath.split('|')[0];
+    return Object.values(this.map).filter((group) => (group.name === absolutePath));
+  } // getSelfGroupsForAbsolutePath
 
   findGroupForNewSubject(subjectToAdd) {
     const groupName = deriveGroupName(subjectToAdd.absolutePath);
@@ -161,6 +166,10 @@ module.exports = class SubjectGroups {
       toGroup.addSample(s);
     });
   } // moveSubject
+
+  removeGroup(group) {
+    delete this.map[group.key];
+  } // removeGroup
 
   removeEmptyGroups() {
     Object.values(this.map)

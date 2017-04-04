@@ -104,6 +104,15 @@ module.exports = class SubjectGroup {
   }
 
   /**
+   * Update the self subject
+   *
+   * @param {Object} s - the subject to update
+   */
+  updateSelf(s) {
+    this.self = s;
+  }
+
+  /**
    * Remove the subject from this SubjectGroup.
    *
    * @param {Object} s - the subject to remove
