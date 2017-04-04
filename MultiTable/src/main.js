@@ -158,7 +158,7 @@ function blinkChecker() {
   const blinkers = mt.querySelectorAll('.blink');
   for (let i = 0; i < blinkers.length; i++) {
     const cell = blinkers[i];
-    const sample = data.getGroupForAbsolutePath(cell.id)
+    const sample = data.getParentGroupForAbsolutePath(cell.id)
                    .samples[cell.id.toLowerCase()];
     if (sample && SampleUtils.statusChangedRecently(sample,
       conf.blinkIfNewStatusThresholdMillis)) {
