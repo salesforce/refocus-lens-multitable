@@ -63,9 +63,11 @@ module.exports = class SubjectGroups {
     this.map = jsonToSubjectGroups(jsonHierarchy);
     this.rootSubject = jsonHierarchy.absolutePath;
     this.splitGroupMap = {};
+    this.showAll = false;
   } // constructor
 
   reset(showAll) {
+    this.showAll = showAll;
     d3c.keys(this.map).forEach((name) => {
       this.map[name.toLowerCase()].reset(showAll);
     });
@@ -121,7 +123,7 @@ module.exports = class SubjectGroups {
     return group;
   } // findGroupForNewSubject
 
-  addSubjectGroup(name, subject, showAll, splitNum) {
+  addSubjectGroup(name, subject, showAll = this.showAll, splitNum) {
     const newGroup = new SubjectGroup(name, subject, showAll, splitNum);
     this.map[newGroup.key] = newGroup;
     return newGroup;
