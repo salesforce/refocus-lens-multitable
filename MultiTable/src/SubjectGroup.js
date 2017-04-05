@@ -62,14 +62,27 @@ module.exports = class SubjectGroup {
     return sg.aspectsToShow.size > 0 && sg.subjectsToShow.size > 0;
   }
 
+  isEmpty() {
+    return this.subjectList().length === 0;
+  }
+
   /**
    * @param {Object} s - the sample
    */
   trackSampleAspectAndSubject(s) {
     if (this.showAll || SampleUtils.isNotOK(s)) {
       const sampleNameSplit = SampleUtils.splitName(s.name);
-      this.aspectsToShow.add(sampleNameSplit.aspect.name);
-      this.subjectsToShow.add(sampleNameSplit.subject.absolutePath);
+
+      const aspectToShow = sampleNameSplit.aspect.name;
+      if (this.aspects[aspectToShow]) {
+        this.aspectsToShow.add(aspectToShow);
+      }
+
+      const subjectToShow = sampleNameSplit.subject.absolutePath;
+      if (this.subjects[subjectToShow.toLowerCase()]) {
+        this.subjectsToShow.add(subjectToShow);
+      }
+
     }
   }
 
@@ -235,8 +248,12 @@ module.exports = class SubjectGroup {
              .sort(aspectSorter);
   }
 
+  subjectList() {
+    return Object.values(this.subjects);
+  }
+
   getSortedSubjectList() {
-    return Object.values(this.subjects).sort(SubjectGroup.subjectSorter);
+    return this.subjectList().sort(SubjectGroup.subjectSorter);
   }
 
   static subjectSorter(subject1, subject2) {

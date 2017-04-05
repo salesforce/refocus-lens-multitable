@@ -78,6 +78,9 @@ function onSubjectRemove(data, subject) {
     const parentGroup = data.getParentGroupForAbsolutePath(subject.absolutePath);
     if (parentGroup) {
       data.removeSubject(parentGroup, subject);
+      if (parentGroup.isEmpty()) {
+        data.removeGroup(parentGroup);
+      }
     }
 
     const selfGroups = data.getSelfGroupsForAbsolutePath(subject.absolutePath);

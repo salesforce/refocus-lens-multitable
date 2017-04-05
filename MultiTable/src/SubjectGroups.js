@@ -79,8 +79,12 @@ module.exports = class SubjectGroups {
     return panelsToShow;
   } // getPanelsToDraw
 
+  groupList() {
+    return Object.values(this.map);
+  } // groupList
+
   getSortedGroupList() {
-    return Object.values(this.map).sort(SubjectGroup.nameSorter);
+    return this.groupList().sort(SubjectGroup.nameSorter);
   } // getSortedGroupList
 
   getNextGroup(group) {
@@ -99,7 +103,7 @@ module.exports = class SubjectGroups {
 
   getSelfGroupsForAbsolutePath(absolutePath) {
     absolutePath = absolutePath.split('|')[0];
-    return Object.values(this.map).filter((group) => (group.name === absolutePath));
+    return this.groupList().filter((group) => (group.name === absolutePath));
   } // getSelfGroupsForAbsolutePath
 
   findGroupForNewSubject(subjectToAdd) {
@@ -130,7 +134,7 @@ module.exports = class SubjectGroups {
       delete this.map[group.key];
       group.key += '-1';
       this.map[group.key] = group;
-      Object.values(group.subjects).forEach((subject) => {
+      group.subjectList().forEach((subject) => {
         this.trackSubject(subject, group);
       });
     }
@@ -172,8 +176,8 @@ module.exports = class SubjectGroups {
   } // removeGroup
 
   removeEmptyGroups() {
-    Object.values(this.map)
-    .filter(group => !Object.keys(group.subjects).length)
+    this.groupList()
+    .filter(group => group.isEmpty())
     .forEach(group => delete this.map[group.key]);
   } // removeEmptyGroups
 
