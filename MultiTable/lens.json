@@ -4,7 +4,7 @@
   "helpEmail": "igoldstein@salesforce.com",
   "helpUrl": "https://github.com/salesforce/refocus-lens-multitable",
   "license": "TBD",
-  "version": "1.0.14",
+  "version": "1.0.15",
   "releaseNotes": {
     "0.0.2": "Add more fields to the contents of the Sample modal.",
     "0.0.3": "Use handlebars templates; move external libraries to /lib",
@@ -29,6 +29,7 @@
     "1.0.11": "subjectSorter fix",
     "1.0.12": "Realtime changes on parent subjects",
     "1.0.13": "Remove empty groups",
-    "1.0.14": "Apply showAll value to new groups"
+    "1.0.14": "Apply showAll value to new groups",
+    "1.0.15": "Fix blank header for root subject group"
   }
 }
