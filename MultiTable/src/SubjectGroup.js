@@ -216,12 +216,12 @@ module.exports = class SubjectGroup {
     let shortName;
     if (this.name.toLowerCase().indexOf(rootSubject.toLowerCase()) === 0) {
       if (this.name.toLowerCase() === rootSubject.toLowerCase()) {
-        shortName = self.name;
+        shortName = this.self.name;
       } else {
         shortName = this.name.slice(1 + rootSubject.length);
       }
     } else {
-      shortName = self.name;
+      shortName = this.self.name;
     }
 
     return {
