@@ -4,6 +4,10 @@
 
 A fluid multi-table layout. Each table groups subjects together under a shared parent.
 
+![Sample1](/2017-04-17_15-40-14.png)
+
+![Sample2](/2017-04-17_15-40-25.png)
+
 ### Setup
 
 1. Git clone this repo.
