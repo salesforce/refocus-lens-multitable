@@ -46,7 +46,7 @@ npm test
 Run the Refocus LDK's `build` script to generate the lens library (`refocus-ldk/dist/MultiTable.zip`).
 
 ```
-npm build
+npm run build
 ```
 
 ### Deploy
