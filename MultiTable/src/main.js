@@ -248,7 +248,7 @@ function setSampleListeners(subjectGroup) {
       }
 
       if (s.relatedLinks && s.relatedLinks.length > 1) {
-        s.relatedLinks.sort(Utils.sort);
+        s.relatedLinks.sort(Utils.sortByNameAscending);
       }
 
       bindContentToModal(sampleModal, template.sampleModal,
