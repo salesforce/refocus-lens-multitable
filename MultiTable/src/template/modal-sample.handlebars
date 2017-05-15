@@ -41,22 +41,22 @@
             <div class="list-group sample-related-links">
               {{#if data.relatedLinks}}
                 {{#each data.relatedLinks}}
-              <a class="list-group-item" target="_blank" style="padding: .25rem 0.75rem" href="{{url}}">{{name}}</a>
-              {{else}}{{/each}}
+                  <a class="list-group-item" target="_blank" style="padding: .25rem 0.75rem" href="{{url}}">{{name}}</a>
+                {{else}}{{/each}}
               {{/if}}
             </div>
 
             <h5>{{heading.help}}</h5>
             <div class="list-group help">
               {{#if data.aspect.helpUrl}}
-              <a class="list-group-item" target="_blank" href="{{data.aspect.helpUrl}}">{{text.url}}</a>
+                <a class="list-group-item" target="_blank" href="{{data.aspect.helpUrl}}">{{text.url}}</a>
               {{else}}
-              <span class="list-group-item">{{text.url}}</span>
+                <span class="list-group-item">{{text.url}}</span>
               {{/if}}
               {{#if data.aspect.helpEmail}}
-              <a class="list-group-item" target="_blank" href="mailto:{{data.aspect.helpEmail}}">{{text.email}}</a>
+                <a class="list-group-item" target="_blank" href="mailto:{{data.aspect.helpEmail}}">{{text.email}}</a>
               {{else}}
-              <span class="list-group-item">{{text.email}}</span>
+                <span class="list-group-item">{{text.email}}</span>
               {{/if}}
             </div>
 
@@ -64,8 +64,8 @@
             <div class="list-group">
               {{#if data.aspect.relatedLinks}}
                 {{#each data.aspect.relatedLinks}}
-              <a class="list-group-item" target="_blank" style="padding: .25rem 0.75rem" href="{{url}}">{{name}}</a>
-              {{else}}{{/each}}
+                  <a class="list-group-item" target="_blank" style="padding: .25rem 0.75rem" href="{{url}}">{{name}}</a>
+                {{else}}{{/each}}
               {{/if}}
             </div>
           </div><!-- col-xs-4 -->
