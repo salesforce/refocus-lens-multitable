@@ -74,7 +74,7 @@ module.exports = class SubjectGroup {
       const sampleNameSplit = SampleUtils.splitName(s.name);
 
       const aspectToShow = sampleNameSplit.aspect.name;
-      if (this.aspects[aspectToShow]) {
+      if (this.aspects[aspectToShow.toLowerCase()]) {
         this.aspectsToShow.add(aspectToShow);
       }
 
@@ -95,7 +95,7 @@ module.exports = class SubjectGroup {
    */
   addSample(s) {
     this.samples[s.name.toLowerCase()] = s;
-    this.aspects[s.aspect.name] = s.aspect;
+    this.aspects[s.aspect.name.toLowerCase()] = s.aspect;
   }
 
   /**
@@ -242,7 +242,7 @@ module.exports = class SubjectGroup {
 
   getAspectsToShow() {
     return Array.from(this.aspectsToShow)
-             .map(a => this.aspects[a])
+             .map(a => this.aspects[a.toLowerCase()])
              .filter(a => a)
              .sort(aspectSorter);
   }
