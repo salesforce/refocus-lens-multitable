@@ -15,11 +15,17 @@
       "close": {
         "label": "Close"
       },
+      "text": {
+        "url": "URL",
+        "email": "Email"
+      },
       "heading": {
         "description": "Aspect Description",
+        "help": "Aspect Help",
         "lastUpdated": "Last Updated",
         "message": "Message",
         "relatedLinks": "Related Links",
+        "aspectRelatedLinks": "Aspect Related Links",
         "status": "Status",
         "tags": "Aspect Tags"
       }

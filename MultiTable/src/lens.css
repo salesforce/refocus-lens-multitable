@@ -80,15 +80,19 @@ body {
   height: 1em;
 }
 
-#modal-aspect .list-group.help {
+#modal-aspect .list-group.help,
+#modal-sample .list-group.help,
+#modal-sample .list-group.sample-related-links {
   margin-bottom: 1em;
 }
 
-#modal-aspect .list-group-item {
+#modal-aspect .list-group-item,
+#modal-sample .list-group-item {
   padding: .25rem .75rem;
 }
 
-#modal-aspect span.list-group-item {
+#modal-aspect span.list-group-item,
+#modal-sample span.list-group-item {
   background-color: inherit;
   border-color: #ccc;
 }
