@@ -290,7 +290,7 @@ function setAspectListeners(subjectGroup) {
     aspectElement.addEventListener('click', (evt) => {
 
       let aspectName = evt.target.innerHTML;
-      let aspect = subjectGroup.aspects[aspectName];
+      let aspect = subjectGroup.aspects[aspectName.toLowerCase()];
 
       if (aspect.tags && aspect.tags.length > 1) {
         aspect.tags.sort(Utils.sort);
