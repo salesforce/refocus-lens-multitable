@@ -202,7 +202,6 @@ function onDraw() {
 } // onDraw
 
 let resizeWaiting = false;
-
 function onResize() {
   if (resizeWaiting) return;
   resizeWaiting = true;
@@ -223,7 +222,6 @@ function splitAndDraw() {
  * This function modifies the DOM.
  */
 let scrollbarToggled;
-
 function doDraw() {
   const widthBeforeDraw = mt.clientWidth;
   const panels = preparePanelsToDraw();
