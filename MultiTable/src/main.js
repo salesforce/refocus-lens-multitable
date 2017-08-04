@@ -258,7 +258,7 @@ function bindContentToModal(modal, modalTemplate, context, content) {
   modal.innerHTML = '';
   modal.insertAdjacentHTML('beforeend', str);
 
-  // add event handlers to detect clickingo of links
+  // add event handlers to detect clicking of links
   modal.querySelectorAll('a.list-group-item').forEach((link) => {
     link.addEventListener('click', (evt) => {
       trackClick('Outbound Link', evt.target.href);
