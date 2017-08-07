@@ -30,6 +30,7 @@ const template = {
 const RealtimeChangeHandler = require('./RealtimeChangeHandler');
 const SubjectGroups = require('./SubjectGroups');
 
+const EVENT_CATEGORY = 'Lens - Multitable';
 const LENS = document.getElementById('lens');
 
 let data;
@@ -46,9 +47,9 @@ let aspectModal;
 let urlParams = {};
 
 // for (ctrl + f) or (cmd + f)
-window.onkeydown = function(e) {
+window.onkeydown = (e) => {
   if (ga && e.keyCode == 70 && (e.ctrlKey || e.metaKey)) {
-    ga('send', 'event', 'Lens - Multitable', 'Search Command');
+    ga('send', 'event', EVENT_CATEGORY, 'Browser Search Command');
   }
 }
 
@@ -105,12 +106,12 @@ LENS.addEventListener('refocus.lens.load', () => {
 /**
  * Send event to google analytics
  *
- * @param {String} action: ie. ' click subject', 'click aspect', or 'Outbound Link'.
+ * @param {String} action: ie. ' click subject', 'click aspect', or 'outbound link'.
  * @param {String} label: ie. subjectAbsolutePath, aspectName, or mailto:addressHere
  */
 function trackClick(action, label) {
   if (ga) {
-    ga('send', 'event', 'Lens - Multitable', action, label);
+    ga('send', 'event', EVENT_CATEGORY, action, label);
   }
 }
 
@@ -134,12 +135,9 @@ function onHierarchyLoad(evt) {
   let showAll = $('#toggle-show-all').prop('checked');
   if (showAll) data.reset(showAll);
 
+
   $('#toggle-show-all').change((evt) => {
-    if (evt.target.checked == true) {
-      trackClick('check', 'Show All');
-    } else {
-      trackClick('uncheck', 'Show All');
-    }
+    trackClick(evt.target.checked ? 'check' : 'uncheck', 'Show All');
 
     data.reset(evt.target.checked);
     enqueueDrawEvent();
@@ -261,7 +259,7 @@ function bindContentToModal(modal, modalTemplate, context, content) {
   // add event handlers to detect clicking of links
   modal.querySelectorAll('a.list-group-item').forEach((link) => {
     link.addEventListener('click', (evt) => {
-      trackClick('Outbound Link', evt.target.href);
+      trackClick('outbound link', evt.target.href);
     });
   });
 } // bindContentToModal
@@ -338,7 +336,7 @@ function setAspectListeners(subjectGroup) {
   });
 } // setAspectListeners
 
-handlebars.registerHelper('flattenRange', function(range) {
+handlebars.registerHelper('flattenRange', (range) => {
   if (range == null) {
     return null;
   } else if (range[0] == range[1]) {
