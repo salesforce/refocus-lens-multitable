@@ -30,7 +30,8 @@ const template = {
 const RealtimeChangeHandler = require('./RealtimeChangeHandler');
 const SubjectGroups = require('./SubjectGroups');
 
-const EVENT_CATEGORY = 'Lens - Multitable';
+const VERSION = require('../lens.json').version;
+const EVENT_CATEGORY = 'Lens - Multitable ' + VERSION;
 const LENS = document.getElementById('lens');
 
 let data;
@@ -49,7 +50,7 @@ let urlParams = {};
 // for (ctrl + f) or (cmd + f)
 window.onkeydown = (e) => {
   if (ga && e.keyCode == 70 && (e.ctrlKey || e.metaKey)) {
-    ga('send', 'event', EVENT_CATEGORY, 'Browser Search Command');
+    ga('send', 'event', EVENT_CATEGORY, 'browser search command');
   }
 }
 
