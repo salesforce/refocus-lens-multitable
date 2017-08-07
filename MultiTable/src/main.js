@@ -30,6 +30,8 @@ const template = {
 const RealtimeChangeHandler = require('./RealtimeChangeHandler');
 const SubjectGroups = require('./SubjectGroups');
 
+const VERSION = require('../lens.json').version;
+const EVENT_CATEGORY = 'Lens - Multitable ' + VERSION;
 const LENS = document.getElementById('lens');
 
 let data;
@@ -44,6 +46,13 @@ let sampleModal;
 let subjectModal;
 let aspectModal;
 let urlParams = {};
+
+// for (ctrl + f) or (cmd + f)
+window.onkeydown = (e) => {
+  if (ga && e.keyCode == 70 && (e.ctrlKey || e.metaKey)) {
+    ga('send', 'event', EVENT_CATEGORY, 'browser search command');
+  }
+}
 
 LENS.addEventListener('refocus.lens.load', () => {
   LENS.addEventListener('refocus.lens.hierarchyLoad', onHierarchyLoad);
@@ -96,6 +105,18 @@ LENS.addEventListener('refocus.lens.load', () => {
 });
 
 /**
+ * Send event to google analytics
+ *
+ * @param {String} action: ie. ' click subject', 'click aspect', or 'outbound link'.
+ * @param {String} label: ie. subjectAbsolutePath, aspectName, or mailto:addressHere
+ */
+function trackClick(action, label) {
+  if (ga) {
+    ga('send', 'event', EVENT_CATEGORY, action, label);
+  }
+}
+
+/**
  * Handler for the refocus.lens.hierarchyLoad event.
  * (1) Transform the hierarhcy into a data structure which is optimized for
  *     this multi-table layout.
@@ -115,7 +136,10 @@ function onHierarchyLoad(evt) {
   let showAll = $('#toggle-show-all').prop('checked');
   if (showAll) data.reset(showAll);
 
+
   $('#toggle-show-all').change((evt) => {
+    trackClick(evt.target.checked ? 'check' : 'uncheck', 'Show All');
+
     data.reset(evt.target.checked);
     enqueueDrawEvent();
   });
@@ -159,7 +183,7 @@ function blinkChecker() {
   for (let i = 0; i < blinkers.length; i++) {
     const cell = blinkers[i];
     const sample = data.getParentGroupForAbsolutePath(cell.id)
-                   .samples[cell.id.toLowerCase()];
+      .samples[cell.id.toLowerCase()];
     if (sample && SampleUtils.statusChangedRecently(sample,
       conf.blinkIfNewStatusThresholdMillis)) {
       cell.className = cell.className.replace(/blink blink-\w+/, '');
@@ -232,6 +256,13 @@ function bindContentToModal(modal, modalTemplate, context, content) {
   const str = modalTemplate(context);
   modal.innerHTML = '';
   modal.insertAdjacentHTML('beforeend', str);
+
+  // add event handlers to detect clicking of links
+  modal.querySelectorAll('a.list-group-item').forEach((link) => {
+    link.addEventListener('click', (evt) => {
+      trackClick('outbound link', evt.target.href);
+    });
+  });
 } // bindContentToModal
 
 function setSampleListeners(subjectGroup) {
@@ -239,6 +270,7 @@ function setSampleListeners(subjectGroup) {
     .querySelectorAll('.sample');
   samples.forEach((sample) => {
     sample.addEventListener('click', (evt) => {
+      trackClick('click sample', evt.target.id);
       const s = subjectGroup.samples[evt.target.dataset.sampleId.toLowerCase()];
       s.updatedAtFormatted = moment.tz(s.updatedAt, moment.tz.guess()).format(conf.dateFormatString);
       s.statusChangedAtFormatted = moment.tz(s.statusChangedAt,
@@ -266,6 +298,7 @@ function setSubjectListeners(subjectGroup) {
       const s = evt.target.dataset.subjectId.toLowerCase() ===
         subjectGroup.name.toLowerCase() ? subjectGroup.self :
         subjectGroup.subjects[evt.target.dataset.subjectId.toLowerCase()];
+      trackClick('click subject', subject.getAttribute('data-subject-id'));
       s.updatedAtFormatted = moment.tz(s.updatedAt,
         moment.tz.guess()).format(conf.dateFormatString);
       if (s.tags && s.tags.length > 1) {
@@ -285,11 +318,11 @@ function setSubjectListeners(subjectGroup) {
 
 function setAspectListeners(subjectGroup) {
   const aspectElements = document.getElementById(subjectGroup.key)
-                                 .querySelectorAll('.aspect');
+    .querySelectorAll('.aspect');
   aspectElements.forEach((aspectElement) => {
     aspectElement.addEventListener('click', (evt) => {
-
       let aspectName = evt.target.innerHTML;
+      trackClick('click aspect', aspectName);
       let aspect = subjectGroup.aspects[aspectName.toLowerCase()];
 
       if (aspect.tags && aspect.tags.length > 1) {
@@ -304,7 +337,7 @@ function setAspectListeners(subjectGroup) {
   });
 } // setAspectListeners
 
-handlebars.registerHelper('flattenRange', function (range) {
+handlebars.registerHelper('flattenRange', (range) => {
   if (range == null) {
     return null;
   } else if (range[0] == range[1]) {

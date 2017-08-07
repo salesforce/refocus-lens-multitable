@@ -4,7 +4,7 @@
   "helpEmail": "igoldstein@salesforce.com",
   "helpUrl": "https://github.com/salesforce/refocus-lens-multitable",
   "license": "TBD",
-  "version": "1.0.19",
+  "version": "1.0.20",
   "releaseNotes": {
     "0.0.2": "Add more fields to the contents of the Sample modal.",
     "0.0.3": "Use handlebars templates; move external libraries to /lib",
@@ -34,6 +34,7 @@
     "1.0.16": "Sort sample related links alphabetically",
     "1.0.17": "Aspect name case insensitivity",
     "1.0.18": "Show aspect help links and related links in sample modal",
-    "1.0.19": "Aspect name case insensitivity - missed one"
+    "1.0.19": "Aspect name case insensitivity - missed one",
+    "1.0.20": "Add google analytics tracking for search, onclick modals and links, and toggle checkbox"
   }
 }
