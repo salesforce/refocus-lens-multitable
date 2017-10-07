@@ -35,6 +35,7 @@
     "1.0.17": "Aspect name case insensitivity",
     "1.0.18": "Show aspect help links and related links in sample modal",
     "1.0.19": "Aspect name case insensitivity - missed one",
-    "1.0.20": "Add google analytics tracking for search, onclick modals and links, and toggle checkbox"
+    "1.0.20": "Add google analytics tracking for search, onclick modals and links, and toggle checkbox",
+    "1.0.21": "Prevent reverse tabnabbing"
   }
 }
