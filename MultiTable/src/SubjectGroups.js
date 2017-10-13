@@ -1,3 +1,14 @@
+/**
+ * Copyright (c) 2017, salesforce.com, inc.
+ * All rights reserved.
+ * Licensed under the BSD 3-Clause license.
+ * For full license text, see LICENSE.txt file in the repo root or
+ * https://opensource.org/licenses/BSD-3-Clause
+ */
+
+/**
+ * ./Multitable/src/SubjectGroups.js
+ */
 'use strict';
 const d3c = require('./lib/d3-collection.v1.min.js');
 const SubjectGroup = require('./SubjectGroup');
