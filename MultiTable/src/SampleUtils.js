@@ -7,7 +7,7 @@
  */
 
 /**
- * ./Multitable/src/SampleUtils.js
+ * ./MultiTable/src/SampleUtils.js
  */
 'use strict';
 

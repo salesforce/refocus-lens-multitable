@@ -7,7 +7,7 @@
  */
 
 /**
- * ./Multitable/src/RealtimeChangeHandler.js
+ * ./MultiTable/src/RealtimeChangeHandler.js
  */
 'use strict';
 const SubjectGroups = require('./SubjectGroups');

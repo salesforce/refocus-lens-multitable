@@ -7,7 +7,7 @@
  */
 
 /**
- * ./Multitable/src/Utils.js
+ * ./MultiTable/src/Utils.js
  *
  * Some general helper functions.
  */

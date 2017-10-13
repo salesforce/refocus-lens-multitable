@@ -7,7 +7,7 @@
  */
 
 /**
- * ./Multitable/src/SubjectGroups.js
+ * ./MultiTable/src/SubjectGroups.js
  */
 'use strict';
 const d3c = require('./lib/d3-collection.v1.min.js');

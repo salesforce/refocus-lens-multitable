@@ -7,7 +7,7 @@
  */
 
 /**
- * ./Multitable/src/SubjectUtils.js
+ * ./MultiTable/src/SubjectUtils.js
  *
  * Utility functions for subjects.
  */
