@@ -91,8 +91,8 @@ module.exports = class SampleUtils {
 
   static isUnderRootSubject(sample, rootSubject) {
     return sample.name.toLowerCase()
-      .indexOf(rootSubject.toLowerCase()) === 0;
-  }
+      .startsWith(rootSubject.toLowerCase()) === true;
+  } // isUnderRootSubject
 
   /**
    * Filters an array of samples, returning only those samples with status OK
