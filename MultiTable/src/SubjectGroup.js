@@ -259,7 +259,7 @@ module.exports = class SubjectGroup {
   }
 
   subjectList() {
-    return Object.values(this.subjects);
+    return d3c.values(this.subjects);
   }
 
   getSortedSubjectList() {

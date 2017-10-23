@@ -68,5 +68,43 @@ describe('./test/RealtimeChangeHandler.js >', () => {
       expect(() => RealtimeChangeHandler.handle([], data))
       .to.throw(/MultiTable|RealtimeChangeHandler.handle|Invalid arg "chg"/);
     });
+
+    it('sample.update missing new', () => {
+      const chg = { 'sample.update': { name: 'a.b|c' } };
+      expect(() => RealtimeChangeHandler.handle(chg, data))
+      .to.throw(/MultiTable|RealtimeChangeHandler.handle|Invalid arg "chg"/);
+    });
+
+    it('subject.update missing new', () => {
+      const chg = { 'subject.update': { absolutePath: 'a.b' } };
+      expect(() => RealtimeChangeHandler.handle(chg, data))
+      .to.throw(/MultiTable|RealtimeChangeHandler.handle|Invalid arg "chg"/);
+    });
+
+    it('sample.update with new', () => {
+      const chg = {
+        'sample.update': {
+          new: {
+            name: 'a|c',
+            value: '0',
+          },
+        },
+      };
+      expect(() => RealtimeChangeHandler.handle(chg, data))
+      .not.to.throw(Error);
+    });
+
+    it('subject.update with new', () => {
+      const chg = {
+        'subject.update': {
+          new: {
+            absolutePath: 'a',
+            description: 'x',
+          },
+        },
+      };
+      expect(() => RealtimeChangeHandler.handle(chg, data))
+      .not.to.throw(Error);
+    });
   });
 });
