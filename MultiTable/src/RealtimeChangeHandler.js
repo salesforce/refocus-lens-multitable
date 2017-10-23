@@ -13,6 +13,7 @@
 const SubjectGroups = require('./SubjectGroups');
 const SampleUtils = require('./SampleUtils');
 const SubjectUtils = require('./SubjectUtils');
+const INVALID_ARG = 'MultiTable|RealtimeChangeHandler.handle|Invalid arg: ';
 
 function onSampleAdd(data, sample) {
   // console.log(new Date(), 'onSampleAdd', sample);
@@ -120,23 +121,56 @@ function onSubjectUpdate(data, change) {
   }
 }
 
+function validateData(data) {
+  if (data && data instanceof SubjectGroups) {
+    return true;
+  }
+
+  throw new Error(INVALID_ARG + '"data" must be instance of SubjectGroups.');
+}
+
+function validateChg(chg) {
+  if (chg && typeof chg === 'object' && (
+    chg.hasOwnProperty('sample.add') ||
+    chg.hasOwnProperty('sample.remove') || (
+      chg.hasOwnProperty('sample.update') &&
+      chg['sample.update'].hasOwnProperty('new')
+    ) ||
+    chg.hasOwnProperty('subject.add') ||
+    chg.hasOwnProperty('subject.remove') || (
+      chg.hasOwnProperty('subject.update') &&
+      chg['subject.update'].hasOwnProperty('new')
+    )
+  )) {
+    return true;
+  }
+
+  throw new Error(INVALID_ARG + '"chg" must be an object with an attribute ' +
+    'corresponding to the type of the realtime event.');
+}
+
 module.exports = class RealtimeChangeHandler {
 
+  /**
+   * Handle each type of change by updating the data accordingly.
+   *
+   * @throws Error if invalid chg or data
+   */
   static handle(chg, data) {
-    if (data && chg) {
-      if (chg['sample.add']) {
-        onSampleAdd(data, chg['sample.add']);
-      } else if (chg['sample.remove']) {
-        onSampleRemove(data, chg['sample.remove']);
-      } else if (chg['sample.update'] && chg['sample.update'].new) {
-        onSampleUpdate(data, chg['sample.update'].new);
-      } else if (chg['subject.add']) {
-        onSubjectAdd(data, chg['subject.add']);
-      } else if (chg['subject.remove']) {
-        onSubjectRemove(data, chg['subject.remove']);
-      } else if (chg['subject.update'] && chg['subject.update'].new) {
-        onSubjectUpdate(data, chg['subject.update'].new);
-      }
+    validateData(data);
+    validateChg(chg);
+    if (chg['sample.add']) {
+      onSampleAdd(data, chg['sample.add']);
+    } else if (chg['sample.remove']) {
+      onSampleRemove(data, chg['sample.remove']);
+    } else if (chg['sample.update'] && chg['sample.update'].new) {
+      onSampleUpdate(data, chg['sample.update'].new);
+    } else if (chg['subject.add']) {
+      onSubjectAdd(data, chg['subject.add']);
+    } else if (chg['subject.remove']) {
+      onSubjectRemove(data, chg['subject.remove']);
+    } else if (chg['subject.update'] && chg['subject.update'].new) {
+      onSubjectUpdate(data, chg['subject.update'].new);
     }
   }
 

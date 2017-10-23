@@ -179,7 +179,13 @@ function onRealtimeChange(evt) {
   lastUpdatedAt.firstChild.nodeValue =
     lastUpdatedMoment.format(conf.dateFormatString);
   if (Array.isArray(evt.detail) && evt.detail.length > 0) {
-    evt.detail.forEach((chg) => RealtimeChangeHandler.handle(chg, data));
+    evt.detail.forEach((chg) => {
+      try {
+        RealtimeChangeHandler.handle(chg, data);
+      } catch (err) {
+        console.error(err);
+      }
+    });
     enqueueDrawEvent();
   }
 } // onRealtimeChange
