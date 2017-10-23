@@ -63,11 +63,11 @@ describe('SampleUtils Tests', () => {
         .to.equal(false );
     });
 
-    it('return true when subjectAbsolutePath is an empty string', () => {
+    it('return false when subjectAbsolutePath is an empty string', () => {
       const sample = { name: 'Fellowship.Gandalf.JJ1.A9|LOCKERROOM' };
       const subjectAbsolutePath = '';
       expect(SampleUtils.isUnderRootSubject(sample, subjectAbsolutePath))
-        .to.equal(true );
+        .to.equal(false );
     });
   }); // isUnderRootSubject
 

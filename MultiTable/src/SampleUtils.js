@@ -90,7 +90,7 @@ module.exports = class SampleUtils {
   } // statusChangedRecently
 
   static isUnderRootSubject(sample, rootSubject) {
-    return sample.name.toLowerCase()
+    return rootSubject.length > 0 && sample.name.toLowerCase()
       .startsWith(rootSubject.toLowerCase()) === true;
   } // isUnderRootSubject
 
