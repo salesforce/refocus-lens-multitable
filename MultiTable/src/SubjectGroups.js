@@ -93,7 +93,7 @@ module.exports = class SubjectGroups {
   } // getPanelsToDraw
 
   groupList() {
-    return Object.values(this.map);
+    return d3c.values(this.map);
   } // groupList
 
   getSortedGroupList() {
