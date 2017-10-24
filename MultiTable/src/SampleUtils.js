@@ -91,7 +91,7 @@ module.exports = class SampleUtils {
 
   static isUnderRootSubject(sample, rootSubject) {
     return rootSubject.length > 0 && sample.name.toLowerCase()
-      .startsWith(rootSubject.toLowerCase()) === true;
+      .startsWith(rootSubject.toLowerCase());
   } // isUnderRootSubject
 
   /**

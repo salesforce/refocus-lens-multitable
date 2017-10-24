@@ -168,6 +168,7 @@ module.exports = class SubjectGroup {
    */
   updateSample(s) {
     this.samples[s.name.toLowerCase()] = s;
+    this.aspects[s.aspect.name.toLowerCase()] = s.aspect;
   }
 
   /**
