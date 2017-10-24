@@ -5,7 +5,7 @@
 const expect = require('chai').expect;
 const SubjectGroups = require('../src/SubjectGroups');
 const SubjectGroup = require('../src/SubjectGroup');
-const hierarchy = require('./sample-sysinfra');
+const hierarchy = require('./test-hierarchy');
 const util = require('util');
 
 describe('./test/SubjectGroups.js >', () => {
@@ -38,16 +38,16 @@ describe('./test/SubjectGroups.js >', () => {
 
     it('absolutePath arg is valid sample name', () => {
       const sgrp =
-        sg.getParentGroupForAbsolutePath('Fellowship.Samwise.JJ1.D11|OAUTH');
+        sg.getParentGroupForAbsolutePath('Fellowship.Aragorn.JJ1.B52|OAUTH');
       expect(sgrp instanceof SubjectGroup).to.equal.true;
-      expect(sgrp).to.have.property('name', 'Fellowship.Samwise.JJ1');
+      expect(sgrp).to.have.property('name', 'Fellowship.Aragorn.JJ1');
     });
 
     it('absolutePath arg is valid subject absolutePath', () => {
       const sgrp =
-        sg.getParentGroupForAbsolutePath('Fellowship.Samwise.JJ1.D11');
+        sg.getParentGroupForAbsolutePath('Fellowship.Aragorn.JJ1.B52');
       expect(sgrp instanceof SubjectGroup).to.equal.true;
-      expect(sgrp).to.have.property('name', 'Fellowship.Samwise.JJ1');
+      expect(sgrp).to.have.property('name', 'Fellowship.Aragorn.JJ1');
     });
 
     it('undefined if neither splitGroup nor normalGroup found for absolutePath', () => {
@@ -59,9 +59,9 @@ describe('./test/SubjectGroups.js >', () => {
     'should use normalGroup', () => {
       expect(sg.splitGroupMap).to.deep.equal({});
       const sgrp =
-        sg.getParentGroupForAbsolutePath('Fellowship.Samwise.JJ1.D11');
+        sg.getParentGroupForAbsolutePath('Fellowship.Aragorn.JJ1.B52');
       expect(sgrp instanceof SubjectGroup).to.equal.true;
-      expect(sgrp).to.have.property('name', 'Fellowship.Samwise.JJ1');
+      expect(sgrp).to.have.property('name', 'Fellowship.Aragorn.JJ1');
     });
   });
 
@@ -203,8 +203,8 @@ describe('./test/SubjectGroups.js >', () => {
       const sg = new SubjectGroups(hierarchy);
       const panelsToDraw = sg.getPanelsToDraw().map((p) => p.name);
       const sortedPanels = panelsToDraw.slice().sort();
-      expect(Object.keys(sg.map).length).to.equal(26);
-      expect(panelsToDraw.length).to.equal(14);
+      expect(Object.keys(sg.map).length).to.equal(11);
+      expect(panelsToDraw.length).to.equal(5);
       expect(sortedPanels).to.deep.equal(panelsToDraw);
     });
 
@@ -213,8 +213,8 @@ describe('./test/SubjectGroups.js >', () => {
       sg.reset(true);
       const panelsToDraw = sg.getPanelsToDraw().map((p) => p.name);
       const sortedPanels = panelsToDraw.slice().sort();
-      expect(Object.keys(sg.map).length).to.equal(26);
-      expect(panelsToDraw.length).to.equal(17);
+      expect(Object.keys(sg.map).length).to.equal(11);
+      expect(panelsToDraw.length).to.equal(7);
       expect(sortedPanels).to.deep.equal(panelsToDraw);
     });
   });
