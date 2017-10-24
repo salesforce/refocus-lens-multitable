@@ -27,6 +27,50 @@ describe('SampleUtils Tests', () => {
     it('Invalid Date');
   }); // elapsedMillis
 
+  describe('isUnderRootSubject', () => {
+    it('return true', () => {
+      const sample = { name: 'Fellowship.Gandalf.JJ1.A9|LOCKERROOM' };
+      const subjectAbsolutePath = 'Fellowship.Gandalf.JJ1.A9';
+      expect(SampleUtils.isUnderRootSubject(sample, subjectAbsolutePath))
+        .to.equal(true);
+    });
+
+    it('return true with all lowercase', () => {
+      const sample = { name: 'fellowship.gandalf.jj1.A9|LOCKERROOM'};
+      const subjectAbsolutePath = 'fellowship.gandalf.jj1.A9';
+      expect(SampleUtils.isUnderRootSubject(sample, subjectAbsolutePath))
+        .to.equal(true);
+    });
+
+    it('return true with some lower and some upper', () => {
+      const sample =  { name: 'Fellowship.Gandalf.JJ1.A9|LOCKERROOM'};
+      const subjectAbsolutePath = 'fellowship.gandalf.jj1.A9';
+      expect(SampleUtils.isUnderRootSubject(sample, subjectAbsolutePath))
+        .to.equal(true);
+    });
+
+    it('return true with some lower and some upper', () => {
+      const sample = { name: 'Fellowship.Gandalf.JJ1.A9|LOCKERROOM' };
+      const subject = 'fellowship.gandalf.jj1.A9';
+      expect(SampleUtils.isUnderRootSubject(sample, subject))
+        .to.equal(true);
+    });
+
+    it('return false', () => {
+      const sample = { name: 'Fellowship.Gandalf.JJ1.A9|LOCKERROOM' };
+      const subjectAbsolutePath = 'Fellowship.GandalfTheGrey.jj1.A9';
+      expect(SampleUtils.isUnderRootSubject(sample, subjectAbsolutePath))
+        .to.equal(false );
+    });
+
+    it('return false when subjectAbsolutePath is an empty string', () => {
+      const sample = { name: 'Fellowship.Gandalf.JJ1.A9|LOCKERROOM' };
+      const subjectAbsolutePath = '';
+      expect(SampleUtils.isUnderRootSubject(sample, subjectAbsolutePath))
+        .to.equal(false );
+    });
+  }); // isUnderRootSubject
+
   describe('isNotOK', () => {
     it('status is not OK', () => {
       expect(SampleUtils.isNotOK({ status: 'Info' })).to.equal(true);
