@@ -22,12 +22,14 @@ describe('./test/RealtimeChangeHandler.js >', () => {
   describe('handle: updateSample >', () => {
 
     it('updateSample should be called for a sample update event', () => {
-      const data = new SubjectGroups(sgArgs);
-      const sample = { name: 'a|b', status: 'OK', aspect: { name: 'b'} };
+      const _sgArgs = { absolutePath: 'Fellowship', name: 'Fellowship'}
+      const data = new SubjectGroups(_sgArgs);
+      const sample = { name: 'Fellowship|View', status: 'OK',
+        aspect: { name: 'View'} };
       let chg = { 'sample.add': sample };
       RealtimeChangeHandler.handle(chg, data);
-      const updatedSample = { name: 'a|b', status: 'Critical',
-        aspect: { name: 'b'} };
+      const updatedSample = { name: 'Fellowship|View', status: 'Critical',
+        aspect: { name: 'View'} };
       chg = { 'sample.update': { new : updatedSample } };
       RealtimeChangeHandler.handle(chg, data);
 
@@ -35,24 +37,30 @@ describe('./test/RealtimeChangeHandler.js >', () => {
        * make sure that the samples instance object of the subjectGroup is
        * updated
        */
-      expect(data.map.a.samples['a|b']).to.eq(updatedSample);
-      expect(Object.keys(data.map.a.samples)).to.have.lengthOf(1);
+      expect(data.map.fellowship.samples['fellowship|view'])
+        .to.eq(updatedSample);
+      expect(Object.keys(data.map.fellowship.samples)).to.have.lengthOf(1);
 
       /*
        * make sure that the subjects instance object of the subjectGroup has
        * the updated sample
        */
-      expect(data.map.a.subjects.a.samples).to.have.lengthOf(1);
-      expect(data.map.a.subjects.a.samples[0]).to.eql(updatedSample);
+      expect(data.map.fellowship.subjects.fellowship.samples)
+        .to.have.lengthOf(1);
+      expect(data.map.fellowship.subjects.fellowship.samples[0]).to
+        .eql(updatedSample);
      });
 
     it('updateSample should add sample to the subject array if not ' +
       'found', () => {
-      const data = new SubjectGroups(sgArgs);
-      const sample = { name: 'a|b', status: 'OK', aspect: { name: 'b'} };
+      const _sgArgs = { absolutePath: 'Ring', name: 'Ring'}
+      const data = new SubjectGroups(_sgArgs);
+      const sample = { name: 'Ring|Color', status: 'OK',
+        aspect: { name: 'Color'} };
       let chg = { 'sample.add': sample };
       RealtimeChangeHandler.handle(chg, data);
-      const newSample = { name: 'a|c', status: 'OK', aspect: { name: 'c'} };
+      const newSample = { name: 'Ring|Num', status: 'OK',
+        aspect: { name: 'Num'} };
       chg = { 'sample.update': { new : newSample } };
       RealtimeChangeHandler.handle(chg, data);
 
@@ -60,17 +68,17 @@ describe('./test/RealtimeChangeHandler.js >', () => {
        * make sure that the samples instance object of the subjectGroup is
        * updated
        */
-      expect(Object.keys(data.map.a.samples)).to.have.lengthOf(2);
-      expect(data.map.a.samples['a|b']).to.eq(sample);
-      expect(data.map.a.samples['a|c']).to.eq(newSample);
+      expect(Object.keys(data.map.ring.samples)).to.have.lengthOf(2);
+      expect(data.map.ring.samples['ring|color']).to.eq(sample);
+      expect(data.map.ring.samples['ring|num']).to.eq(newSample);
 
       /*
        * make sure that the subjects instance object of the subjectGroup has
        * the new sample added
        */
-      expect(data.map.a.subjects.a.samples).to.have.lengthOf(2);
-      expect(data.map.a.subjects.a.samples[0]).to.eql(sample);
-      expect(data.map.a.subjects.a.samples[1]).to.eql(newSample);
+      expect(data.map.ring.subjects.ring.samples).to.have.lengthOf(2);
+      expect(data.map.ring.subjects.ring.samples[0]).to.eql(sample);
+      expect(data.map.ring.subjects.ring.samples[1]).to.eql(newSample);
      });
   });
 
@@ -136,12 +144,15 @@ describe('./test/RealtimeChangeHandler.js >', () => {
       .to.throw(/MultiTable|RealtimeChangeHandler.handle|Invalid arg "chg"/);
     });
 
-    it.skip('sample.update with new', () => {
+    it('sample.update with new', () => {
       const chg = {
         'sample.update': {
           new: {
             name: 'a|c',
             value: '0',
+            aspect: {
+              name: 'c',
+            }
           },
         },
       };
