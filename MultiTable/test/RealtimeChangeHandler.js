@@ -20,7 +20,6 @@ describe('./test/RealtimeChangeHandler.js >', () => {
   });
 
   describe('handle: updateSample >', () => {
-
     it('updateSample should be called for a sample update event', () => {
       const _sgArgs = { absolutePath: 'Fellowship', name: 'Fellowship'}
       const data = new SubjectGroups(_sgArgs);

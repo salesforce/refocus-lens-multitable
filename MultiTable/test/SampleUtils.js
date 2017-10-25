@@ -5,7 +5,7 @@
 const expect = require('chai').expect;
 const SampleUtils = require('../src/SampleUtils');
 
-describe('SampleUtils Tests', () => {
+describe('./test/SampleUtils.js >', () => {
   describe('elapsedMillis', () => {
     it('happy path with two args', () => {
       const s1 = '2016-05-27T23:11:19.467Z';

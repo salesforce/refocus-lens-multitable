@@ -57,8 +57,7 @@ function onSampleUpdate(data, change) {
         const index = subject.samples.findIndex(s => (s.name === change.name));
         if (index >= 0) {
           subject.samples[index] = change;
-        }
-        else {
+        } else {
           subject.samples.push(change);
         }
       }
