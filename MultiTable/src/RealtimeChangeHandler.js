@@ -58,6 +58,9 @@ function onSampleUpdate(data, change) {
         if (index >= 0) {
           subject.samples[index] = change;
         }
+        else {
+          subject.samples.push(change);
+        }
       }
     }
   }
