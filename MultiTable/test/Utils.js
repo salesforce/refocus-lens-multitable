@@ -5,7 +5,7 @@
 const expect = require('chai').expect;
 const Utils = require('../src/Utils');
 
-describe('Utils Tests', () => {
+describe('./test/Utils.js >', () => {
   describe('formatDate', () => {
     it('happy path, i.e. valid format string and valid date', () => {
       const str = 'mmm d yyyy, h:MM:ss TT Z';

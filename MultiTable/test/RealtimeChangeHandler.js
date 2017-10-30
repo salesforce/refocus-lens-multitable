@@ -14,9 +14,71 @@ describe('./test/RealtimeChangeHandler.js >', () => {
     const data = new SubjectGroups(sgArgs);
     const chg = { 'sample.add': { name: 'a|b', aspect: { name: 'b'} } };
     RealtimeChangeHandler.handle(chg, data);
-    expect(data instanceof SubjectGroups).to.equal.true;
+    expect(data instanceof SubjectGroups).to.be.true;
     expect(data).to.have.property('rootSubject', 'a');
     expect(data.map).to.have.property('a');
+  });
+
+  describe('handle: updateSample >', () => {
+    it('updateSample should be called for a sample update event', () => {
+      const _sgArgs = { absolutePath: 'Fellowship', name: 'Fellowship'}
+      const data = new SubjectGroups(_sgArgs);
+      const sample = { name: 'Fellowship|View', status: 'OK',
+        aspect: { name: 'View'} };
+      let chg = { 'sample.add': sample };
+      RealtimeChangeHandler.handle(chg, data);
+      const updatedSample = { name: 'Fellowship|View', status: 'Critical',
+        aspect: { name: 'View'} };
+      chg = { 'sample.update': { new : updatedSample } };
+      RealtimeChangeHandler.handle(chg, data);
+
+      /*
+       * make sure that the samples instance object of the subjectGroup is
+       * updated
+       */
+      expect(data.map.fellowship.samples['fellowship|view'])
+        .to.eq(updatedSample);
+      expect(Object.keys(data.map.fellowship.samples)).to.have.lengthOf(1);
+
+      /*
+       * make sure that the subjects instance object of the subjectGroup has
+       * the updated sample
+       */
+      expect(data.map.fellowship.subjects.fellowship.samples)
+        .to.have.lengthOf(1);
+      expect(data.map.fellowship.subjects.fellowship.samples[0]).to
+        .eql(updatedSample);
+     });
+
+    it('updateSample should add sample to the subject array if not ' +
+      'found', () => {
+      const _sgArgs = { absolutePath: 'Ring', name: 'Ring'}
+      const data = new SubjectGroups(_sgArgs);
+      const sample = { name: 'Ring|Color', status: 'OK',
+        aspect: { name: 'Color'} };
+      let chg = { 'sample.add': sample };
+      RealtimeChangeHandler.handle(chg, data);
+      const newSample = { name: 'Ring|Num', status: 'OK',
+        aspect: { name: 'Num'} };
+      chg = { 'sample.update': { new : newSample } };
+      RealtimeChangeHandler.handle(chg, data);
+
+      /*
+       * make sure that the samples instance object of the subjectGroup is
+       * updated
+       */
+      expect(Object.keys(data.map.ring.samples)).to.have.lengthOf(2);
+      expect(data.map.ring.samples['ring|color']).to.eq(sample);
+      expect(data.map.ring.samples['ring|num']).to.eq(newSample);
+
+      /*
+       * make sure that the subjects instance object of the subjectGroup has
+       * the new sample added
+       */
+      expect(data.map.ring.subjects.ring.samples).to.have.lengthOf(2);
+      expect(data.map.ring.subjects.ring.samples[0]).to.eql(sample);
+      expect(data.map.ring.subjects.ring.samples[1]).to.eql(newSample);
+     });
   });
 
   describe('handle: validateData >', () => {
@@ -87,6 +149,9 @@ describe('./test/RealtimeChangeHandler.js >', () => {
           new: {
             name: 'a|c',
             value: '0',
+            aspect: {
+              name: 'c',
+            }
           },
         },
       };
