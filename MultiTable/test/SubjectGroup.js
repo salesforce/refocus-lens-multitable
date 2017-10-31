@@ -24,7 +24,7 @@ describe('SubjectGroups Tests', () => {
       isPublished: true,
       name: 'LOCKERROOM',
       rank: 0,
-    }
+    },
   };
 
   describe('addSample ', () => {
@@ -70,7 +70,7 @@ describe('SubjectGroups Tests', () => {
           name: 'LOCKERROOM',
           rank: 0,
           description: 'New Updated description',
-        }
+        },
       };
       subjectGroup.updateSample(updatedSample);
       const samples = subjectGroup.samples;
@@ -146,15 +146,19 @@ describe('SubjectGroups Tests', () => {
   describe('getSubjectsToShow', () => {
     const subjectGroup = new SubjectGroup(subject.parentAbsolutePath, subject);
     subjectGroup.subjects = {
-      abc: {name: 'abc'},
-      test: {name: 'test'},
-      xyz: {name: 'xyz'},
-      zzzz: {name: 'zzzz'},
+      abc: { name: 'abc' },
+      test: { name: 'test' },
+      xyz: { name: 'xyz' },
+      zzzz: { name: 'zzzz' },
     };
 
     it('Default behaviour', (done) => {
       const expectedArray = [
-       { name: 'abc' },{ name: 'test' },{ name: 'xyz' },{ name: 'zzzz' } ];
+        { name: 'abc' },
+        { name: 'test' },
+        { name: 'xyz' },
+        { name: 'zzzz' },
+      ];
       subjectGroup.subjectsToShow = new Set(['Abc', 'zzzz', 'test', 'xyz']);
       expect(subjectGroup.getSubjectsToShow())
        .to.be.deep.equal(expectedArray);
@@ -164,7 +168,10 @@ describe('SubjectGroups Tests', () => {
     it('Subject is not present in Subjects object', (done) => {
       subjectGroup.subjectsToShow = new Set(['Abc', 'zz', 'test', 'xyz']);
       const expectedArray = [
-      { name: 'abc' },{ name: 'test' },{ name: 'xyz' } ];
+        { name: 'abc' },
+        { name: 'test' },
+        { name: 'xyz' },
+      ];
       expect(subjectGroup.getSubjectsToShow())
         .to.be.deep.equal(expectedArray);
       return done();
@@ -175,15 +182,15 @@ describe('SubjectGroups Tests', () => {
     const subjectGroup = new SubjectGroup(subject.parentAbsolutePath, subject);
 
     subjectGroup.subjects = {
-      abc: {name: 'abc'},
-      test: {name: 'test'},
-      xyz: {name: 'xyz'},
-      zzzz: {name: 'zzzz'},
+      abc: { name: 'abc' },
+      test: { name: 'test' },
+      xyz: { name: 'xyz' },
+      zzzz: { name: 'zzzz' },
     };
 
     subjectGroup.aspects = {
-      test1: {name: 'test1'},
-      test2: {name: 'test2'},
+      test1: { name: 'test1' },
+      test2: { name: 'test2' },
     };
 
     beforeEach(() => {
@@ -192,10 +199,10 @@ describe('SubjectGroups Tests', () => {
     });
 
     subjectGroup.aspects = {
-      test1: {name: 'test1'},
-      test2: {name: 'test2'},
+      test1: { name: 'test1' },
+      test2: { name: 'test2' },
     };
-    
+
     it('Default behaviour', (done) => {
       subjectGroup.showAll = false;
       const sample1 = {
@@ -309,15 +316,15 @@ describe('SubjectGroups Tests', () => {
     const subjectGroup = new SubjectGroup(subject.parentAbsolutePath, subject);
 
     subjectGroup.subjects = {
-      abc: {name: 'abc'},
-      test: {name: 'test'},
-      xyz: {name: 'xyz'},
-      zzzz: {name: 'zzzz'},
+      abc: { name: 'abc' },
+      test: { name: 'test' },
+      xyz: { name: 'xyz' },
+      zzzz: { name: 'zzzz' },
     };
 
     subjectGroup.aspects = {
-      test1: {name: 'test1'},
-      test2: {name: 'test2'},
+      test1: { name: 'test1' },
+      test2: { name: 'test2' },
     };
 
     beforeEach(() => {
