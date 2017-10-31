@@ -142,4 +142,268 @@ describe('SubjectGroups Tests', () => {
       expect(subj).to.eq(undefined);
     });
   });
+
+  describe('getSubjectsToShow', () => {
+    const subjectGroup = new SubjectGroup(subject.parentAbsolutePath, subject);
+    subjectGroup.subjects = {
+      abc: {name: 'abc'},
+      test: {name: 'test'},
+      xyz: {name: 'xyz'},
+      zzzz: {name: 'zzzz'},
+    };
+
+    it('Default behaviour', (done) => {
+      const expectedArray = [
+       { name: 'abc' },{ name: 'test' },{ name: 'xyz' },{ name: 'zzzz' } ];
+      subjectGroup.subjectsToShow = new Set(['Abc', 'zzzz', 'test', 'xyz']);
+      expect(subjectGroup.getSubjectsToShow())
+       .to.be.deep.equal(expectedArray);
+      return done();
+    });
+
+    it('Subject is not present in Subjects object', (done) => {
+      subjectGroup.subjectsToShow = new Set(['Abc', 'zz', 'test', 'xyz']);
+      const expectedArray = [
+      { name: 'abc' },{ name: 'test' },{ name: 'xyz' } ];
+      expect(subjectGroup.getSubjectsToShow())
+        .to.be.deep.equal(expectedArray);
+      return done();
+    });
+  });
+
+  describe('trackSampleAspectAndSubject', () => {
+    const subjectGroup = new SubjectGroup(subject.parentAbsolutePath, subject);
+
+    subjectGroup.subjects = {
+      abc: {name: 'abc'},
+      test: {name: 'test'},
+      xyz: {name: 'xyz'},
+      zzzz: {name: 'zzzz'},
+    };
+
+    subjectGroup.aspects = {
+      test1: {name: 'test1'},
+      test2: {name: 'test2'},
+    };
+
+    beforeEach(() => {
+      subjectGroup.subjectsToShow = new Set([]);
+      subjectGroup.aspectsToShow = new Set([]);
+    });
+
+    subjectGroup.aspects = {
+      test1: {name: 'test1'},
+      test2: {name: 'test2'},
+    };
+    
+    it('Default behaviour', (done) => {
+      subjectGroup.showAll = false;
+      const sample1 = {
+        name: 'abc|test1',
+        status: 'Critical',
+      };
+
+      subjectGroup.trackSampleAspectAndSubject(sample1);
+      expect(subjectGroup.subjectsToShow.size).to.equal(1);
+      expect(subjectGroup.subjectsToShow.has('abc')).to.be.true;
+      expect(subjectGroup.aspectsToShow.size).to.equal(1);
+      expect(subjectGroup.aspectsToShow.has('test1')).to.be.true;
+      return done();
+    });
+
+    it('Status is OK then do not show subject and aspect', (done) => {
+      subjectGroup.showAll = false;
+      const sample1 = {
+        name: 'abc|test1',
+        status: 'OK',
+      };
+
+      subjectGroup.trackSampleAspectAndSubject(sample1);
+      expect(subjectGroup.subjectsToShow.size).to.equal(0);
+      expect(subjectGroup.subjectsToShow.has('abc')).to.be.false;
+      expect(subjectGroup.aspectsToShow.size).to.equal(0);
+      expect(subjectGroup.aspectsToShow.has('test1')).to.be.false;
+      return done();
+    });
+
+    it('showAll is on and OK status still show all aspect and subject',
+      (done) => {
+      subjectGroup.showAll = true;
+      const sample1 = {
+        name: 'abc|test1',
+        status: 'OK',
+      };
+
+      subjectGroup.trackSampleAspectAndSubject(sample1);
+      expect(subjectGroup.subjectsToShow.size).to.equal(1);
+      expect(subjectGroup.subjectsToShow.has('abc')).to.be.true;
+      expect(subjectGroup.aspectsToShow.size).to.equal(1);
+      expect(subjectGroup.aspectsToShow.has('test1')).to.be.true;
+      return done();
+    });
+
+    it('showAll is off and OK status present then do not show that' +
+      'subject and aspect', (done) => {
+      subjectGroup.showAll = false;
+      subjectGroup.subjectsToShow = new Set([]);
+      const sample1 = {
+        name: 'abc|test1',
+        status: 'OK',
+      };
+
+      subjectGroup.trackSampleAspectAndSubject(sample1);
+      expect(subjectGroup.subjectsToShow.size).to.equal(0);
+      expect(subjectGroup.subjectsToShow.has('abc')).to.be.false;
+      expect(subjectGroup.aspectsToShow.size).to.equal(0);
+      expect(subjectGroup.aspectsToShow.has('test1')).to.be.false;
+      return done();
+    });
+
+    it('Subject not present', (done) => {
+      subjectGroup.subjectsToShow = new Set([]);
+      const sample1 = {
+        name: 'abc123|test1',
+        status: 'Critical',
+      };
+
+      subjectGroup.trackSampleAspectAndSubject(sample1);
+      expect(subjectGroup.subjectsToShow.size).to.equal(0);
+      expect(subjectGroup.subjectsToShow.has('abc')).to.be.false;
+      expect(subjectGroup.aspectsToShow.size).to.equal(1);
+      expect(subjectGroup.aspectsToShow.has('test1')).to.be.true;
+      return done();
+    });
+
+    it('Aspect not present', (done) => {
+      subjectGroup.subjectsToShow = new Set([]);
+      const sample1 = {
+        name: 'abc|test3',
+        status: 'Critical',
+      };
+
+      subjectGroup.trackSampleAspectAndSubject(sample1);
+      expect(subjectGroup.subjectsToShow.size).to.equal(1);
+      expect(subjectGroup.subjectsToShow.has('abc')).to.be.true;
+      expect(subjectGroup.aspectsToShow.size).to.equal(0);
+      expect(subjectGroup.aspectsToShow.has('test1')).to.be.false;
+      return done();
+    });
+
+    it('Aspect and Subject not present', (done) => {
+      subjectGroup.subjectsToShow = new Set([]);
+      const sample1 = {
+        name: 'abc123|test3',
+        status: 'Critical',
+      };
+
+      subjectGroup.trackSampleAspectAndSubject(sample1);
+      expect(subjectGroup.subjectsToShow.size).to.equal(0);
+      expect(subjectGroup.subjectsToShow.has('abc')).to.be.false;
+      expect(subjectGroup.aspectsToShow.size).to.equal(0);
+      expect(subjectGroup.aspectsToShow.has('test1')).to.be.false;
+      return done();
+    });
+  });
+
+  describe('reset', () => {
+    const subjectGroup = new SubjectGroup(subject.parentAbsolutePath, subject);
+
+    subjectGroup.subjects = {
+      abc: {name: 'abc'},
+      test: {name: 'test'},
+      xyz: {name: 'xyz'},
+      zzzz: {name: 'zzzz'},
+    };
+
+    subjectGroup.aspects = {
+      test1: {name: 'test1'},
+      test2: {name: 'test2'},
+    };
+
+    beforeEach(() => {
+      subjectGroup.subjectsToShow = new Set([]);
+      subjectGroup.aspectsToShow = new Set([]);
+    });
+
+    it('Without passing showAll flag', (done) => {
+      subjectGroup.samples = [
+        {
+          name: 'abc|test1',
+          status: 'Critical',
+        },
+        {
+          name: 'abc|test2',
+          status: 'Critical',
+        },
+      ];
+
+      subjectGroup.reset();
+      expect(subjectGroup.subjectsToShow.size).to.equal(1);
+      expect(subjectGroup.subjectsToShow.has('abc')).to.be.true;
+      expect(subjectGroup.aspectsToShow.size).to.equal(2);
+      expect(subjectGroup.aspectsToShow.has('test1')).to.be.true;
+      return done();
+    });
+
+    it('With showAll flag true and sample status Critical', (done) => {
+      subjectGroup.samples = [
+        {
+          name: 'abc|test1',
+          status: 'Critical',
+        },
+        {
+          name: 'abc|test2',
+          status: 'Critical',
+        },
+      ];
+
+      subjectGroup.reset(true);
+      expect(subjectGroup.subjectsToShow.size).to.equal(1);
+      expect(subjectGroup.subjectsToShow.has('abc')).to.be.true;
+      expect(subjectGroup.aspectsToShow.size).to.equal(2);
+      expect(subjectGroup.aspectsToShow.has('test1')).to.be.true;
+      return done();
+    });
+
+    it('With passing showAll flag true and sample status OK', (done) => {
+      subjectGroup.samples = [
+        {
+          name: 'abc|test1',
+          status: 'OK',
+        },
+        {
+          name: 'abc|test2',
+          status: 'OK',
+        },
+      ];
+
+      subjectGroup.reset(true);
+      expect(subjectGroup.subjectsToShow.size).to.equal(1);
+      expect(subjectGroup.subjectsToShow.has('abc')).to.be.true;
+      expect(subjectGroup.aspectsToShow.size).to.equal(2);
+      expect(subjectGroup.aspectsToShow.has('test1')).to.be.true;
+      return done();
+    });
+
+    it('With passing showAll flag false and mix sample status', (done) => {
+      subjectGroup.samples = [
+        {
+          name: 'abc|test1',
+          status: 'OK',
+        },
+        {
+          name: 'abc|test2',
+          status: 'Critical',
+        },
+      ];
+
+      subjectGroup.reset(false);
+      expect(subjectGroup.subjectsToShow.size).to.equal(1);
+      expect(subjectGroup.subjectsToShow.has('abc')).to.be.true;
+      expect(subjectGroup.aspectsToShow.size).to.equal(1);
+      expect(subjectGroup.aspectsToShow.has('test1')).to.be.false;
+      expect(subjectGroup.aspectsToShow.has('test2')).to.be.true;
+      return done();
+    });
+  });
 });
