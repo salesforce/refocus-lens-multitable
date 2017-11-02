@@ -249,22 +249,6 @@ describe('SubjectGroups Tests', () => {
       return done();
     });
 
-    it('showAll is off and OK status present then do not show that' +
-      'subject and aspect', (done) => {
-      subjectGroup.showAll = false;
-      const sample1 = {
-        name: 'abc|test1',
-        status: 'OK',
-      };
-
-      subjectGroup.trackSampleAspectAndSubject(sample1);
-      expect(subjectGroup.subjectsToShow.size).to.equal(0);
-      expect(subjectGroup.subjectsToShow.has('abc')).to.be.false;
-      expect(subjectGroup.aspectsToShow.size).to.equal(0);
-      expect(subjectGroup.aspectsToShow.has('test1')).to.be.false;
-      return done();
-    });
-
     it('Subject not present', (done) => {
       const sample1 = {
         name: 'abc123|test1',
