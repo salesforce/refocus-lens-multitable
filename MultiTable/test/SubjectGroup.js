@@ -252,7 +252,6 @@ describe('SubjectGroups Tests', () => {
     it('showAll is off and OK status present then do not show that' +
       'subject and aspect', (done) => {
       subjectGroup.showAll = false;
-      subjectGroup.subjectsToShow = new Set([]);
       const sample1 = {
         name: 'abc|test1',
         status: 'OK',
@@ -267,7 +266,6 @@ describe('SubjectGroups Tests', () => {
     });
 
     it('Subject not present', (done) => {
-      subjectGroup.subjectsToShow = new Set([]);
       const sample1 = {
         name: 'abc123|test1',
         status: 'Critical',
@@ -282,7 +280,6 @@ describe('SubjectGroups Tests', () => {
     });
 
     it('Aspect not present', (done) => {
-      subjectGroup.subjectsToShow = new Set([]);
       const sample1 = {
         name: 'abc|test3',
         status: 'Critical',
@@ -297,7 +294,6 @@ describe('SubjectGroups Tests', () => {
     });
 
     it('Aspect and Subject not present', (done) => {
-      subjectGroup.subjectsToShow = new Set([]);
       const sample1 = {
         name: 'abc123|test3',
         status: 'Critical',
