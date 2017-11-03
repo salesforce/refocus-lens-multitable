@@ -4,6 +4,7 @@
 'use strict';
 const expect = require('chai').expect;
 const Utils = require('../src/Utils');
+const airportHierarchy = require('./test-us-airport-hierarchy');
 
 describe('./test/Utils.js >', () => {
   describe('formatDate', () => {
@@ -45,4 +46,46 @@ describe('./test/Utils.js >', () => {
     });
   }); // sortByNameAscending
 
+  describe.only('inventory', () => {
+    it('should contain all the subjects and the samples keyed off ' +
+      'of absolutepath/name', () => {
+      const inv = Utils.inventory(airportHierarchy);
+      expect(inv).to.have.property('samples');
+      expect(inv).to.have.property('subjects');
+      const samples = Object.keys(inv.samples);
+      const subjects = Object.keys(inv.subjects);
+      expect(samples).to.include.members(['usa.ca.sfo|delay',
+        'usa.ca.sfo.hyd|delay', 'usa.maine|delay', 'usa.ma.bos|delay']);
+      expect(subjects).to.include.members(['usa', 'usa.ca', 'usa.ca.sfo',
+        'usa.ca.sfo.hyd', 'usa.maine', 'usa.ma', 'usa.ma.bos'])
+    });
+
+    it('should return empty samples and subjects for an empty object', () => {
+      const inv = Utils.inventory({});
+      expect(inv).to.have.property('samples');
+      expect(inv).to.have.property('subjects');
+      const samples = Object.keys(inv.samples);
+      const subjects = Object.keys(inv.subjects);
+      expect(Object.keys(inv.samples)).to.have.length(0);
+      expect(Object.keys(inv.subjects)).to.have.length(0);
+    });
+
+    it('samples object should be empty for hierarchy without samples', () => {
+      const hierarchy = {
+        absolutePath: 'USA',
+        name: 'USA',
+        children: [
+          {
+            absolutePath: 'USA.CA',
+            name: 'CA',
+         }],
+      }
+      const inv = Utils.inventory(hierarchy);
+      expect(inv).to.have.property('samples');
+      expect(inv).to.have.property('subjects');
+      expect(Object.keys(inv.samples)).to.have.length(0);
+      expect(Object.keys(inv.subjects)).to.have.length(2);
+      expect(Object.keys(inv.subjects)).to.include.members(['usa', 'usa.ca'])
+    });
+  }); // inventory
 }); // Utils

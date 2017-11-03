@@ -6,7 +6,7 @@ const expect = require('chai').expect;
 const SubjectGroup = require('../src/SubjectGroup');
 const SubjectGroups = require('../src/SubjectGroups');
 
-describe('SubjectGroups Tests', () => {
+describe('./test/SubjectGroup.js >', () => {
   const subject = {
     absolutePath: 'Fellowship.Gandalf.JJ1',
     isPublished: true,
@@ -26,6 +26,33 @@ describe('SubjectGroups Tests', () => {
       rank: 0,
     },
   };
+
+  describe('addSubject ', () => {
+    it('Adding sample should add both the sample and the aspect', () => {
+      const subjectGroup = new SubjectGroup(subject.parentAbsolutePath,
+        subject);
+      subjectGroup.addSample(sample);
+      const samples = subjectGroup.samples;
+      const aspects = subjectGroup.aspects;
+      expect(Object.keys(samples).length).to.equal(1);
+      expect(Object.keys(aspects).length).to.equal(1);
+      expect(samples[sample.name.toLowerCase()]).to.eql(sample);
+      expect(aspects[sample.aspect.name.toLowerCase()]).to.eql(sample.aspect);
+    });
+
+    it('Samples and aspects should be added to their respective  data ' +
+      'structures keyed off of their lowercased name', () => {
+      const subjectGroup = new SubjectGroup(subject.parentAbsolutePath,
+        subject);
+      subjectGroup.addSample(sample);
+      const samples = subjectGroup.samples;
+      const aspects = subjectGroup.aspects;
+      expect(samples[sample.name]).to.eql(undefined);
+      expect(aspects[sample.aspect.name]).to.eql(undefined);
+      expect(samples[sample.name.toLowerCase()]).to.eql(sample);
+      expect(aspects[sample.aspect.name.toLowerCase()]).to.eql(sample.aspect);
+    });
+  });
 
   describe('addSample ', () => {
     it('Adding sample should add both the sample and the aspect', () => {

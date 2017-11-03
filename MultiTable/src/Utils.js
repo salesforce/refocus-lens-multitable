@@ -14,10 +14,17 @@
 'use strict';
 
 module.exports = class Utils {
-
   static inventory(subject) {
     const inv = {
+      // has all the samples in the subject hierarchy keyed off of sample name
       samples: {},
+
+      /*
+       * has all the subjects keyed off of subject absolutepath. The entire
+       * subject hierarchy, including the samples are part of each subject
+       * TODO: Including the subject hierarchy for each of the subject seems
+       * unncecessary. Just include the subject and its samples here.
+       */
       subjects: {},
     };
     if (subject.absolutePath) {

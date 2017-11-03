@@ -14,13 +14,18 @@ const d3c = require('./lib/d3-collection.v1.min.js');
 const SubjectGroup = require('./SubjectGroup');
 const Utils = require('./Utils');
 
+/*
+ * Return the absolutePath one level up from the absolutePath or sample name
+ * specified. Just the first part of the condition is required, other probably not
+ */
 function deriveGroupName(key) {
   return key.split('.').slice(0, -1).join('.') || key.split('|')[0] || key;
 } // deriveGroupName
 
 /**
  * Converts the hierarchy JSON to an associative array of SubjectGroups keyed
- * by name.
+ * by name. The subjectgroup is created only if the subject has a list of
+ * child subjects.
  *
  * @param {JSON} json - the subject/sample hierarchy
  * @returns {Object} - an associative array of SubjectGroups keyed by name
@@ -41,7 +46,11 @@ function jsonToSubjectGroups(json) {
       groups[grpName.toLowerCase()] = new SubjectGroup(grpName,
         inv.subjects[grpName.toLowerCase()]);
     }
-
+    /*
+     * The subjects are added to the subjetGroup one level up the hierarchy.
+     * for e.g if the subject is 'US.CA.SFO', the subject will be added to the
+     * USA.CA subject group.
+     */
     groups[grpName.toLowerCase()].addSubject(s);
   });
 
@@ -49,6 +58,11 @@ function jsonToSubjectGroups(json) {
   d3c.values(inv.samples).forEach((s) => {
     const grpName = deriveGroupName(s.name);
     try {
+      /*
+       * The samples are added to the subjetGroup one level up the hierarchy.
+       * for e.g if the sample is 'US.CA.SFO|delay', the samples is added to the
+       * USA.CA subject group.
+       */
       groups[grpName.toLowerCase()].addSample(s);
     } catch (e) {
       console.log(e); // NO-OP InvalidSampleNameException
