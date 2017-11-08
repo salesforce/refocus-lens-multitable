@@ -46,7 +46,7 @@ describe('./test/Utils.js >', () => {
     });
   }); // sortByNameAscending
 
-  describe.only('inventory', () => {
+  describe('inventory', () => {
     it('should contain all the subjects and the samples keyed off ' +
       'of absolutepath/name', () => {
       const inv = Utils.inventory(airportHierarchy);
@@ -57,7 +57,7 @@ describe('./test/Utils.js >', () => {
       expect(samples).to.include.members(['usa.ca.sfo|delay',
         'usa.ca.sfo.hyd|delay', 'usa.maine|delay', 'usa.ma.bos|delay']);
       expect(subjects).to.include.members(['usa', 'usa.ca', 'usa.ca.sfo',
-        'usa.ca.sfo.hyd', 'usa.maine', 'usa.ma', 'usa.ma.bos'])
+        'usa.ca.sfo.hyd', 'usa.maine', 'usa.ma', 'usa.ma.bos']);
     });
 
     it('should return empty samples and subjects for an empty object', () => {
