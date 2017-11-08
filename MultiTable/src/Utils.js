@@ -22,7 +22,7 @@ module.exports = class Utils {
       /*
        * has all the subjects keyed off of subject absolutepath. The entire
        * subject hierarchy, including the samples are part of each subject
-       * TODO: Including the subject hierarchy for each of the subject seems
+       * TODO: Including the subject hierarchy for each of the subjects seems
        * unncecessary. Just include the subject and its samples here.
        */
       subjects: {},

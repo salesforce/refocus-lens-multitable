@@ -16,7 +16,7 @@ const Utils = require('./Utils');
 
 /*
  * Return the absolutePath one level up from the absolutePath or sample name
- * specified. Just the first part of the condition is required, other probably not
+ * specified.
  */
 function deriveGroupName(key) {
   return key.split('.').slice(0, -1).join('.') || key.split('|')[0] || key;
@@ -24,7 +24,7 @@ function deriveGroupName(key) {
 
 /**
  * Converts the hierarchy JSON to an associative array of SubjectGroups keyed
- * by name. The subjectgroup is created only if the subject has a list of
+ * by name. The subject group is created only if the subject has a list of
  * child subjects.
  *
  * @param {JSON} json - the subject/sample hierarchy
@@ -47,8 +47,8 @@ function jsonToSubjectGroups(json) {
         inv.subjects[grpName.toLowerCase()]);
     }
     /*
-     * The subjects are added to the subjetGroup one level up the hierarchy.
-     * for e.g if the subject is 'US.CA.SFO', the subject will be added to the
+     * The subjects are added to the subjectGroup one level up the hierarchy.
+     * for e.g. if the subject is 'US.CA.SFO', it will be added to the
      * USA.CA subject group.
      */
     groups[grpName.toLowerCase()].addSubject(s);
@@ -59,8 +59,8 @@ function jsonToSubjectGroups(json) {
     const grpName = deriveGroupName(s.name);
     try {
       /*
-       * The samples are added to the subjetGroup one level up the hierarchy.
-       * for e.g if the sample is 'US.CA.SFO|delay', the samples is added to the
+       * The samples are added to the subjectGroup one level up the hierarchy.
+       * for e.g. if the sample is 'US.CA.SFO|delay', it is added to the
        * USA.CA subject group.
        */
       groups[grpName.toLowerCase()].addSample(s);

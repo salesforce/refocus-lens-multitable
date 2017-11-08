@@ -59,7 +59,7 @@ describe('./test/SubjectGroup.js >', () => {
 
     });
 
-    it('calling updateSubject should the updated subject in SubjectGroup', () => {
+    it('calling updateSubject should update the subject in SubjectGroup', () => {
       const subjectGroup = new SubjectGroup(parentSubject.parentAbsolutePath,
         parentSubject);
 
@@ -92,7 +92,7 @@ describe('./test/SubjectGroup.js >', () => {
       expect(subjectGroup.subjects).to.deep.equal({})
     });
 
-    it('Samples and aspects should be added to their respective  data ' +
+    it('Samples and aspects should be added to their respective data ' +
       'structures keyed off of their lowercased name', () => {
       const subjectGroup = new SubjectGroup(subject.parentAbsolutePath,
         subject);
