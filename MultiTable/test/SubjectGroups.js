@@ -6,6 +6,7 @@ const expect = require('chai').expect;
 const SubjectGroups = require('../src/SubjectGroups');
 const SubjectGroup = require('../src/SubjectGroup');
 const hierarchy = require('./test-hierarchy');
+const airportHierarchy = require('./test-us-airport-hierarchy');
 const util = require('util');
 
 describe('./test/SubjectGroups.js >', () => {
@@ -39,14 +40,14 @@ describe('./test/SubjectGroups.js >', () => {
     it('absolutePath arg is valid sample name', () => {
       const sgrp =
         sg.getParentGroupForAbsolutePath('Fellowship.Aragorn.JJ1.B52|OAUTH');
-      expect(sgrp instanceof SubjectGroup).to.equal.true;
+      expect(sgrp instanceof SubjectGroup).to.be.true;
       expect(sgrp).to.have.property('name', 'Fellowship.Aragorn.JJ1');
     });
 
     it('absolutePath arg is valid subject absolutePath', () => {
       const sgrp =
         sg.getParentGroupForAbsolutePath('Fellowship.Aragorn.JJ1.B52');
-      expect(sgrp instanceof SubjectGroup).to.equal.true;
+      expect(sgrp instanceof SubjectGroup).to.be.true;
       expect(sgrp).to.have.property('name', 'Fellowship.Aragorn.JJ1');
     });
 
@@ -60,8 +61,44 @@ describe('./test/SubjectGroups.js >', () => {
       expect(sg.splitGroupMap).to.deep.equal({});
       const sgrp =
         sg.getParentGroupForAbsolutePath('Fellowship.Aragorn.JJ1.B52');
-      expect(sgrp instanceof SubjectGroup).to.equal.true;
+      expect(sgrp instanceof SubjectGroup).to.be.true;
       expect(sgrp).to.have.property('name', 'Fellowship.Aragorn.JJ1');
+    });
+  });
+
+  describe('SubjectGroup maps >', () => {
+    let sg;
+    let grp;
+
+    before(() => {
+      sg = new SubjectGroups(airportHierarchy);
+    });
+
+    it('map should be empty when passed in an empty hierarchy', () => {
+      const sgs = new SubjectGroups({});
+      expect(sgs.map).to.deep.equal({});
+    });
+
+    it('map should contain subjectGroup instance keyed off of subject ' +
+      'absolutePath. Subjects without children should not have subject group', () => {
+      const sgs = new SubjectGroups(airportHierarchy);
+      console.log(sg.map);
+      const mapKeys = Object.keys(sgs.map);
+      expect(mapKeys).to.include.members(['usa', 'usa.ca', 'usa.ca.sfo',
+         'usa.ma']);
+      mapKeys.forEach((key) => {
+        expect(sg.map[key] instanceof SubjectGroup).to.be.true;
+      })
+    });
+
+    it('map for hierarchy have just one subject in every level', () => {
+      const bosSubject = JSON.parse(JSON.stringify(
+        airportHierarchy.children[2].children[0]));
+      const sgs = new SubjectGroups(bosSubject);
+      expect(Object.keys(sgs.map)).to.include('usa.ma');
+      expect(sgs.map['usa.ma'] instanceof SubjectGroup).to.be.true;
+      const sg = sgs.map['usa.ma'];
+      expect(sg.subjects['usa.ma.bos']).to.deep.equal(bosSubject);
     });
   });
 

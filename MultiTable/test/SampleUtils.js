@@ -42,6 +42,13 @@ describe('./test/SampleUtils.js >', () => {
         .to.equal(true);
     });
 
+    it('return true for sample under subjects parent', () => {
+      const sample =  { name: 'Fellowship.Gandalf.JJ1.A9|LOCKERROOM'};
+      const subjectAbsolutePath = 'fellowship.gandalf.jj1';
+      expect(SampleUtils.isUnderRootSubject(sample, subjectAbsolutePath))
+        .to.equal(true);
+    });
+
     it('return true with some lower and some upper', () => {
       const sample =  { name: 'Fellowship.Gandalf.JJ1.A9|LOCKERROOM'};
       const subjectAbsolutePath = 'fellowship.gandalf.jj1.A9';

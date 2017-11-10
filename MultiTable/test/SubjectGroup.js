@@ -6,7 +6,15 @@ const expect = require('chai').expect;
 const SubjectGroup = require('../src/SubjectGroup');
 const SubjectGroups = require('../src/SubjectGroups');
 
-describe('SubjectGroups Tests', () => {
+describe('./test/SubjectGroup.js >', () => {
+  const parentSubject = {
+    absolutePath: 'Fellowship.Gandalf',
+    isPublished: true,
+    name: 'Gandalf',
+    parentAbsolutePath: 'Fellowship',
+    relatedLinks: [],
+  };
+
   const subject = {
     absolutePath: 'Fellowship.Gandalf.JJ1',
     isPublished: true,
@@ -26,6 +34,77 @@ describe('SubjectGroups Tests', () => {
       rank: 0,
     },
   };
+
+  describe('addSubject/updateSubject/removeSubject', () => {
+    it('calling addSubject should add a subject to the subjectGroup', () => {
+      const subjectGroup = new SubjectGroup(parentSubject.parentAbsolutePath,
+        parentSubject);
+      expect(subjectGroup.self).to.deep.equal(parentSubject);
+      expect(subjectGroup.subjects).to.deep.equal({});
+
+      subjectGroup.addSubject(subject);
+      subjectGroup.addSample(sample);
+      const samples = subjectGroup.samples;
+      const aspects = subjectGroup.aspects;
+      const subjects = subjectGroup.subjects;
+            console.log(subjectGroup);
+
+      expect(Object.keys(subjects).length).to.equal(1);
+      expect(Object.keys(samples).length).to.equal(1);
+      expect(Object.keys(aspects).length).to.equal(1);
+
+      expect(subjects[subject.absolutePath.toLowerCase()]).to.eql(subject);
+      expect(samples[sample.name.toLowerCase()]).to.eql(sample);
+      expect(aspects[sample.aspect.name.toLowerCase()]).to.eql(sample.aspect);
+
+    });
+
+    it('calling updateSubject should update the subject in SubjectGroup', () => {
+      const subjectGroup = new SubjectGroup(parentSubject.parentAbsolutePath,
+        parentSubject);
+
+      subjectGroup.addSubject(subject);
+      subjectGroup.addSample(sample);
+      const updatedSubject = {
+        absolutePath: 'Fellowship.Gandalf.JJ1',
+        isPublished: true,
+        name: 'JJ1',
+        parentAbsolutePath: 'Fellowship.Gandalf',
+        description: 'Updated Subjected'
+      };
+      subjectGroup.updateSubject(updatedSubject);
+      const samples = subjectGroup.samples;
+      const aspects = subjectGroup.aspects;
+      const subjects = subjectGroup.subjects;
+
+      expect(Object.keys(subjects).length).to.equal(1);
+      expect(Object.keys(samples).length).to.equal(1);
+      expect(Object.keys(aspects).length).to.equal(1);
+      expect(subjects[subject.absolutePath.toLowerCase()]).to.eql(updatedSubject);
+    });
+
+    it('calling deleteSubject should delete the subject in subjectGroup', () => {
+      const subjectGroup = new SubjectGroup(parentSubject.parentAbsolutePath,
+        parentSubject);
+
+      subjectGroup.addSubject(subject);
+      subjectGroup.removeSubject(subject);
+      expect(subjectGroup.subjects).to.deep.equal({})
+    });
+
+    it('Samples and aspects should be added to their respective data ' +
+      'structures keyed off of their lowercased name', () => {
+      const subjectGroup = new SubjectGroup(subject.parentAbsolutePath,
+        subject);
+      subjectGroup.addSample(sample);
+      const samples = subjectGroup.samples;
+      const aspects = subjectGroup.aspects;
+      expect(samples[sample.name]).to.eql(undefined);
+      expect(aspects[sample.aspect.name]).to.eql(undefined);
+      expect(samples[sample.name.toLowerCase()]).to.eql(sample);
+      expect(aspects[sample.aspect.name.toLowerCase()]).to.eql(sample.aspect);
+    });
+  });
 
   describe('addSample ', () => {
     it('Adding sample should add both the sample and the aspect', () => {

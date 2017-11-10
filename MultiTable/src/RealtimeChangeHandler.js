@@ -74,9 +74,13 @@ function onSubjectAdd(data, subject) {
     if (!subjectGroup) {
       const parentPath = subject.parentAbsolutePath;
       const grandparentGroup = data.getParentGroupForAbsolutePath(parentPath);
-      if (!grandparentGroup) return;
+      if (!grandparentGroup) {
+        return;
+      };
       const parentSubject = grandparentGroup.subjects[parentPath.toLowerCase()];
-      if (!parentSubject) return;
+      if (!parentSubject)  {
+        return;
+      };
       subjectGroup = data.addSubjectGroup(parentPath, parentSubject);
     }
 

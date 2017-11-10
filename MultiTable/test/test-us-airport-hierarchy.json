@@ -1,0 +1,75 @@
+ {
+  "absolutePath": "USA",
+  "name": "USA",
+  "children": [
+  {
+    "absolutePath": "USA.CA",
+    "name": "CA",
+    "children": [
+    {
+      "absolutePath": "USA.CA.SFO",
+      "name": "SFO",
+      "samples": [
+        {
+          "name": "USA.CA.SFO|Delay",
+          "value": "0",
+          "aspect": {
+            "name": "Delay",
+            "timeout": "20m"
+          }
+        }
+      ],
+      "children": [
+        {
+          "absolutePath": "USA.CA.SFO.HYD",
+          "name": "HYD",
+          "samples": [
+            {
+              "name": "USA.CA.SFO.HYD|Delay",
+              "value": "0",
+              "aspect": {
+                "name": "Delay",
+                "timeout": "20m"
+              }
+            }
+          ]
+        }
+      ]
+    }
+    ]
+  },{
+    "absolutePath": "USA.MAINE",
+    "name": "MAINE",
+    "samples": [
+      {
+        "name": "USA.MAINE|Delay",
+        "value": "10",
+        "aspect": {
+          "name": "Delay",
+          "timeout": "20m"
+        }
+      }
+    ]
+  },{
+    "absolutePath": "USA.MA",
+    "name": "MA",
+    "children": [
+    {
+      "absolutePath": "USA.MA.BOS",
+      "name": "BOS",
+      "samples": [
+        {
+          "name": "USA.MA.BOS|Delay",
+          "value": "0",
+          "aspect": {
+            "name": "Delay",
+            "timeout": "20m"
+          }
+        }
+      ]
+    }
+
+  ]
+  }
+]
+}
