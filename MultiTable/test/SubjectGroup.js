@@ -47,7 +47,6 @@ describe('./test/SubjectGroup.js >', () => {
       const samples = subjectGroup.samples;
       const aspects = subjectGroup.aspects;
       const subjects = subjectGroup.subjects;
-            console.log(subjectGroup);
 
       expect(Object.keys(subjects).length).to.equal(1);
       expect(Object.keys(samples).length).to.equal(1);
@@ -70,7 +69,7 @@ describe('./test/SubjectGroup.js >', () => {
         isPublished: true,
         name: 'JJ1',
         parentAbsolutePath: 'Fellowship.Gandalf',
-        description: 'Updated Subjected'
+        description: 'Updated Subjected',
       };
       subjectGroup.updateSubject(updatedSubject);
       const samples = subjectGroup.samples;
@@ -89,7 +88,7 @@ describe('./test/SubjectGroup.js >', () => {
 
       subjectGroup.addSubject(subject);
       subjectGroup.removeSubject(subject);
-      expect(subjectGroup.subjects).to.deep.equal({})
+      expect(subjectGroup.subjects).to.deep.equal({});
     });
 
     it('Samples and aspects should be added to their respective data ' +
@@ -469,6 +468,104 @@ describe('./test/SubjectGroup.js >', () => {
       expect(subjectGroup.aspectsToShow.size).to.equal(1);
       expect(subjectGroup.aspectsToShow.has('test1')).to.be.false;
       expect(subjectGroup.aspectsToShow.has('test2')).to.be.true;
+      return done();
+    });
+  });
+
+  describe('tableContext', () => {
+    const subjectGroup = new SubjectGroup(subject.parentAbsolutePath, subject);
+    subjectGroup.subjects = {
+      abc: { name: 'abc', absolutePath: 'abc' },
+      test: { name: 'test', absolutePath: 'fellowship.gandalf.test' },
+      xyz: { name: 'xyz', absolutePath: 'fellowship.gandalf.xyz' },
+      zzzz: { name: 'zzzz', absolutePath: 'zzzz' },
+    };
+
+    subjectGroup.subjectsToShow = new Set(['xyz', 'test']);
+
+    subjectGroup.aspects = {
+      aspecttest: {
+        name: 'aspectTest',
+      },
+      aspecttest1: {
+        name: 'aspectTest1',
+      },
+      aspecttest2: {
+        name: 'aspectTest2',
+      },
+    };
+
+    subjectGroup.samples = {
+      'fellowship.test|aspecttest': {
+        status: 'OK',
+        statusChangedAt: 'test',
+      },
+      'fellowship.xyz|aspecttest': {
+        status: 'OK',
+        statusChangedAt: 'test',
+      },
+      'fellowship.test|aspecttest1': {
+        status: 'OK',
+        statusChangedAt: 'test',
+      },
+      'fellowship.xyz|aspecttest1': {
+        status: 'OK',
+        statusChangedAt: 'test',
+      },
+    };
+
+    it('Default behaviour', (done) => {
+      subjectGroup.aspectsToShow = new Set(['aspecttest']);
+      const res = subjectGroup.tableContext('fellowship.gandalf');
+      expect(res.columnCount).to.be.equal(3);
+      expect(res.rows.length).to.be.equal(1);
+      expect(res.rows[0].aspect).to.be.equal('aspectTest');
+      expect(res.rows[0].columns.length).to.be.equal(2);
+      expect(res.rows[0].id).to.be.equal('fellowship.gandalf|aspectTest');
+      return done();
+    });
+
+    it('With two aspects', (done) => {
+      subjectGroup.aspectsToShow = new Set(['aspecttest', 'aspecttest1']);
+      const res = subjectGroup.tableContext('fellowship.gandalf');
+      expect(res.columnCount).to.be.equal(3);
+      expect(res.rows.length).to.be.equal(2);
+      expect(res.rows[0].aspect).to.be.equal('aspectTest');
+      expect(res.rows[0].columns.length).to.be.equal(2);
+      expect(res.rows[0].id).to.be.equal('fellowship.gandalf|aspectTest');
+      expect(res.rows[1].aspect).to.be.equal('aspectTest1');
+      expect(res.rows[1].columns.length).to.be.equal(2);
+      expect(res.rows[1].id).to.be.equal('fellowship.gandalf|aspectTest1');
+      return done();
+    });
+
+    it('Aspect is not in aspects array', (done) => {
+      subjectGroup.aspectsToShow = new Set(['random']);
+      const res = subjectGroup.tableContext('fellowship.gandalf');
+      expect(res.columnCount).to.be.equal(3);
+      expect(res.rows.length).to.be.equal(0);
+      return done();
+    });
+
+    it('Subject is not in subjects array', (done) => {
+      subjectGroup.aspectsToShow = new Set(['aspecttest']);
+      subjectGroup.subjectsToShow = new Set(['random']);
+      const res = subjectGroup.tableContext('fellowship.gandalf');
+      expect(res.columnCount).to.be.equal(1);
+      expect(res.rows.length).to.be.equal(1);
+      expect(res.rows[0].columns.length).to.be.equal(0);
+      return done();
+    });
+
+    it('Sample is not in samples array', (done) => {
+      subjectGroup.aspectsToShow = new Set(['aspecttest2']);
+      subjectGroup.subjectsToShow = new Set(['xyz', 'test']);
+      const res = subjectGroup.tableContext('fellowship.gandalf');
+      expect(res.columnCount).to.be.equal(3);
+      expect(res.rows.length).to.be.equal(1);
+      expect(res.rows[0].aspect).to.be.equal('aspectTest2');
+      expect(res.rows[0].columns.length).to.be.equal(2);
+      expect(res.rows[0].id).to.be.equal('fellowship.gandalf|aspectTest2');
       return done();
     });
   });
