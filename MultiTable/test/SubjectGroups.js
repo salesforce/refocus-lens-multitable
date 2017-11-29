@@ -82,7 +82,6 @@ describe('./test/SubjectGroups.js >', () => {
     it('map should contain subjectGroup instance keyed off of subject ' +
       'absolutePath. Subjects without children should not have subject group', () => {
       const sgs = new SubjectGroups(airportHierarchy);
-      console.log(sg.map);
       const mapKeys = Object.keys(sgs.map);
       expect(mapKeys).to.include.members(['usa', 'usa.ca', 'usa.ca.sfo',
          'usa.ma']);

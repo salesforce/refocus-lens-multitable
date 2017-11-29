@@ -42,8 +42,10 @@ module.exports = class Utils {
           // merge childInv.samples into inv.samples
           Object.assign(inv.samples, childInv.samples);
         });
+        // delete subject.children;
       }
     }
+
     return inv;
   } // inventory
 

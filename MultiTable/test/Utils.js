@@ -7,29 +7,6 @@ const Utils = require('../src/Utils');
 const airportHierarchy = require('./test-us-airport-hierarchy');
 
 describe('./test/Utils.js >', () => {
-  describe('formatDate', () => {
-    it('happy path, i.e. valid format string and valid date', () => {
-      const str = 'mmm d yyyy, h:MM:ss TT Z';
-      const d = '2016-05-27T23:11:19.467Z';
-      expect(Utils.formatDate(str, d))
-        .to.equal('May 27 2016, 4:11:19 PM PDT');
-    });
-
-    it('no date arg, assumes "now"', () => {
-      const str = 'mmm d yyyy, h:MM:ss TT Z';
-      expect(Utils.formatDate(str))
-        .to.match(/^[A-Z][a-z]{2} \d{1,2} \d{4}, \d{1,2}:\d{2}:\d{2} [AP]M [A-Z]{3}$/);
-    });
-
-    it('format string with no formatting', () => {
-      const str = 'abc';
-      const d = '2016-05-27T23:11:19.467Z';
-      expect(Utils.formatDate(str, d)).to.equal('abc');
-    });
-
-    it('Invalid Date');
-  }); // formatDate
-
   describe('sortByNameAscending', () => {
     it('good', () => {
       const arr = [
@@ -47,6 +24,13 @@ describe('./test/Utils.js >', () => {
   }); // sortByNameAscending
 
   describe('inventory', () => {
+    it('for subjects, the children field is not returned', () => {
+      const subject = { absolutePath: 'x', children: [{ absolutePath: 'x.x'}] };
+      const inv = Utils.inventory(subject);
+      expect(inv.subjects['x'].children).to.be.undefined;
+      expect(inv.subjects['x.x'].children).to.be.undefined;
+    });
+
     it('should contain all the subjects and the samples keyed off ' +
       'of absolutepath/name', () => {
       const inv = Utils.inventory(airportHierarchy);
