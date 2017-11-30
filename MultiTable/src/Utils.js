@@ -28,7 +28,11 @@ module.exports = class Utils {
       subjects: {},
     };
     if (subject.absolutePath) {
-      inv.subjects[subject.absolutePath.toLowerCase()] = subject;
+
+      // need deep copy to avoid modifying the input
+      const _subj = JSON.parse(JSON.stringify(subject));
+      delete _subj.children;
+      inv.subjects[subject.absolutePath.toLowerCase()] = _subj;
       if (subject.samples && subject.samples.length) {
         subject.samples.forEach((sample) =>
           inv.samples[sample.name.toLowerCase()] = sample);
@@ -42,7 +46,6 @@ module.exports = class Utils {
           // merge childInv.samples into inv.samples
           Object.assign(inv.samples, childInv.samples);
         });
-        // delete subject.children;
       }
     }
 
