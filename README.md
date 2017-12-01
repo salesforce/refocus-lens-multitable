@@ -20,7 +20,7 @@ A fluid multi-table layout. Each table groups subjects together under a shared p
 
 1. Copy this lens into your `refocus-ldk/Lenses` directory.
 
-        cp -r ../refocus-lens-multitable/MultiTable Lenses/
+        cp -r ../refocus-lens-multitable/MultiTable Lenses/MultiTable/
 
 1. Configure the Refocus LDK.
 

@@ -29,9 +29,19 @@ module.exports = class Utils {
     };
     if (subject.absolutePath) {
 
-      // need deep copy to avoid modifying the input
-      const _subj = JSON.parse(JSON.stringify(subject));
-      delete _subj.children;
+      // deep copy to avoid modifying the input
+      const keys = Object.keys(subject);
+
+      // leafs will not have this key, other subjects will.
+      const childIndex = keys.indexOf('children');
+      if (childIndex > -1) {
+        keys.splice(childIndex, childIndex + 1);
+      }
+
+      const _subj = {};
+      keys.forEach((key) => {
+        _subj[key] = subject[key];
+      });
       inv.subjects[subject.absolutePath.toLowerCase()] = _subj;
       if (subject.samples && subject.samples.length) {
         subject.samples.forEach((sample) =>
