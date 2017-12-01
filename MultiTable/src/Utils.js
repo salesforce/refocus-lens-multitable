@@ -28,7 +28,14 @@ module.exports = class Utils {
       subjects: {},
     };
     if (subject.absolutePath) {
-      inv.subjects[subject.absolutePath.toLowerCase()] = subject;
+
+      // copy non-children keys. leafs will not have this key.
+      const _subj = {};
+      Object.keys(subject).filter((key) => key !== 'children')
+      .forEach((key) => {
+        _subj[key] = subject[key];
+      });
+      inv.subjects[subject.absolutePath.toLowerCase()] = _subj;
       if (subject.samples && subject.samples.length) {
         subject.samples.forEach((sample) =>
           inv.samples[sample.name.toLowerCase()] = sample);
@@ -44,6 +51,7 @@ module.exports = class Utils {
         });
       }
     }
+
     return inv;
   } // inventory
 
