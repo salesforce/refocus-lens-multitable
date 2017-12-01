@@ -31,10 +31,9 @@ module.exports = class Utils {
 
       // copy non-children keys. leafs will not have this key.
       const _subj = {};
-      Object.keys(subject).forEach((key) => {
-        if (key !== 'children') {
-          _subj[key] = subject[key];
-        }
+      Object.keys(subject).filter((key) => key !== 'children')
+      .forEach((key) => {
+        _subj[key] = subject[key];
       });
       inv.subjects[subject.absolutePath.toLowerCase()] = _subj;
       if (subject.samples && subject.samples.length) {
