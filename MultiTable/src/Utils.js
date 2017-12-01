@@ -29,18 +29,12 @@ module.exports = class Utils {
     };
     if (subject.absolutePath) {
 
-      // deep copy to avoid modifying the input
-      const keys = Object.keys(subject);
-
-      // leafs will not have this key, other subjects will.
-      const childIndex = keys.indexOf('children');
-      if (childIndex > -1) {
-        keys.splice(childIndex, childIndex + 1);
-      }
-
+      // copy non-children keys. leafs will not have this key.
       const _subj = {};
-      keys.forEach((key) => {
-        _subj[key] = subject[key];
+      Object.keys(subject).forEach((key) => {
+        if (key !== 'children') {
+          _subj[key] = subject[key];
+        }
       });
       inv.subjects[subject.absolutePath.toLowerCase()] = _subj;
       if (subject.samples && subject.samples.length) {
