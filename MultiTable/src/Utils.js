@@ -37,8 +37,11 @@ module.exports = class Utils {
       });
       inv.subjects[subject.absolutePath.toLowerCase()] = _subj;
       if (subject.samples && subject.samples.length) {
-        subject.samples.forEach((sample) =>
-          inv.samples[sample.name.toLowerCase()] = sample);
+        subject.samples.forEach((sample) => {
+          if (sample.name && (typeof sample.name === 'string')) {
+            inv.samples[sample.name.toLowerCase()] = sample;
+          }
+        });
       }
 
       if (subject.children && subject.children.length) {
