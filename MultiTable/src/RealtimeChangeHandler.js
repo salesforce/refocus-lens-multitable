@@ -17,7 +17,7 @@ const INVALID_ARG = 'MultiTable|RealtimeChangeHandler.handle|Invalid arg: ';
 
 function onSampleAdd(data, sample) {
   // console.log(new Date(), 'onSampleAdd', sample);
-  if (data.rootSubject && SampleUtils.isUnderRootSubject(sample, data.rootSubject)) {
+  if (SampleUtils.isUnderRootSubject(sample, data.rootSubject)) {
     const subjectGroup = data.getParentGroupForAbsolutePath(sample.name);
     if (subjectGroup) {
       subjectGroup.addSample(sample);
@@ -31,7 +31,7 @@ function onSampleAdd(data, sample) {
 
 function onSampleRemove(data, sample) {
   // console.log(new Date(), 'onSampleRemove', sample);
-  if (data.rootSubject && SampleUtils.isUnderRootSubject(sample, data.rootSubject)) {
+  if (SampleUtils.isUnderRootSubject(sample, data.rootSubject)) {
     const subjectGroup = data.getParentGroupForAbsolutePath(sample.name);
     if (subjectGroup) {
       subjectGroup.removeSample(sample);
@@ -48,7 +48,7 @@ function onSampleRemove(data, sample) {
 
 function onSampleUpdate(data, change) {
   // console.log(new Date(), 'onSampleUpdate', change);
-  if (data.rootSubject && SampleUtils.isUnderRootSubject(change, data.rootSubject)) {
+  if (SampleUtils.isUnderRootSubject(change, data.rootSubject)) {
     const subjectGroup = data.getParentGroupForAbsolutePath(change.name);
     if (subjectGroup) {
       subjectGroup.updateSample(change);
@@ -67,7 +67,7 @@ function onSampleUpdate(data, change) {
 
 function onSubjectAdd(data, subject) {
   // console.log(new Date(), 'onSubjectAdd', subject);
-  if (data.rootSubject && SubjectUtils.isUnderRootSubject(subject, data.rootSubject)) {
+  if (SubjectUtils.isUnderRootSubject(subject, data.rootSubject)) {
     if (!subject.samples) subject.samples = [];
     let subjectGroup = data.findGroupForNewSubject(subject);
 
@@ -91,7 +91,7 @@ function onSubjectAdd(data, subject) {
 
 function onSubjectRemove(data, subject) {
   // console.log(new Date(), 'onSubjectRemove', subject);
-  if (data.rootSubject && SubjectUtils.isUnderRootSubject(subject, data.rootSubject)) {
+  if (SubjectUtils.isUnderRootSubject(subject, data.rootSubject)) {
 
     const parentGroup = data.getParentGroupForAbsolutePath(subject.absolutePath);
     if (parentGroup) {
@@ -111,7 +111,7 @@ function onSubjectRemove(data, subject) {
 
 function onSubjectUpdate(data, change) {
   // console.log(new Date(), 'onSubjectUpdate', change);
-  if (data.rootSubject && SubjectUtils.isUnderRootSubject(change, data.rootSubject)) {
+  if (SubjectUtils.isUnderRootSubject(change, data.rootSubject)) {
     if (!change.samples) change.samples = [];
 
     const parentGroup = data.getParentGroupForAbsolutePath(change.absolutePath);
