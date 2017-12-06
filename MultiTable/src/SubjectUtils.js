@@ -16,8 +16,12 @@
 module.exports = class SubjectUtils {
 
   static isUnderRootSubject(subject, rootSubject) {
-    return subject.absolutePath.toLowerCase()
-      .startsWith(rootSubject.toLowerCase());
-  }
+    if (rootSubject && rootSubject.length > 0 && subject &&
+      subject.absolutePath && subject.absolutePath.toLowerCase()
+        .startsWith(rootSubject.toLowerCase())) {
+      return true;
+    }
+    return false;
+  } // isUnderRootSubject
 
 } // module.exports

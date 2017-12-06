@@ -76,6 +76,25 @@ describe('./test/SampleUtils.js >', () => {
       expect(SampleUtils.isUnderRootSubject(sample, subjectAbsolutePath))
         .to.equal(false );
     });
+
+    it('return false when subjectAbsolutePath is null', () => {
+      const sample = { name: 'Fellowship.Gandalf.JJ1.A9|LOCKERROOM' };
+      expect(SampleUtils.isUnderRootSubject(sample, null))
+        .to.equal(false );
+    });
+
+    it('return false when sample is null', () => {
+      const subjectAbsolutePath = 'fellowship.gandalf.jj1.A9';
+      expect(SampleUtils.isUnderRootSubject(null, subjectAbsolutePath))
+        .to.equal(false );
+    });
+
+    it('return false when sample name null', () => {
+      const sample = { name: null };
+      const subjectAbsolutePath = 'fellowship.gandalf.jj1.A9';
+      expect(SampleUtils.isUnderRootSubject(sample, subjectAbsolutePath))
+        .to.equal(false );
+    });
   }); // isUnderRootSubject
 
   describe('isNotOK', () => {

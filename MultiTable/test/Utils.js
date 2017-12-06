@@ -71,5 +71,66 @@ describe('./test/Utils.js >', () => {
       expect(Object.keys(inv.subjects)).to.have.length(2);
       expect(Object.keys(inv.subjects)).to.include.members(['usa', 'usa.ca'])
     });
+
+    it('does not include samples with no name', () => {
+      const hierarchy = {
+        absolutePath: 'USA.CA',
+        name: 'USA',
+        children: [
+          {
+            absolutePath: 'USA.CA.SFO',
+            name: 'CA',
+            "samples": [
+              {
+                "value": "0",
+                "aspect": {
+                  "name": "Delay",
+                  "timeout": "20m"
+                }
+              }
+            ],
+          }
+        ],
+      }
+      const inv = Utils.inventory(hierarchy);
+      expect(inv).to.have.property('samples');
+      expect(inv).to.have.property('subjects');
+      expect(Object.keys(inv.samples)).to.have.length(0);
+      expect(Object.keys(inv.subjects)).to.have.length(2);
+      expect(Object.keys(inv.subjects)).to.include.members(
+        ['usa.ca', 'usa.ca.sfo']
+      )
+    });
+
+    it('does not include samples having name type other than string', () => {
+      const hierarchy = {
+        absolutePath: 'USA.CA',
+        name: 'USA',
+        children: [
+          {
+            absolutePath: 'USA.CA.SFO',
+            name: 'CA',
+            "samples": [
+              {
+                name: ['USA.CA.SFO|Delay'],
+                "value": "0",
+                "aspect": {
+                  "name": "Delay",
+                  "timeout": "20m"
+                }
+              }
+            ],
+          }
+        ],
+      }
+      const inv = Utils.inventory(hierarchy);
+      expect(inv).to.have.property('samples');
+      expect(inv).to.have.property('subjects');
+      expect(Object.keys(inv.samples)).to.have.length(0);
+      expect(Object.keys(inv.subjects)).to.have.length(2);
+      expect(Object.keys(inv.subjects)).to.include.members(
+        ['usa.ca', 'usa.ca.sfo']
+      )
+    });
   }); // inventory
 }); // Utils
