@@ -40,6 +40,7 @@
     "1.0.22": "Add RealtimeChangeHandler arg validation and tests",
     "1.0.23": "Update the sample update handler to add a sample if it's not already being tracked",
     "1.0.24": "Remove subject.children from subject groups inventory",
-    "1.0.25": "Add null checks for isUnderRootSubject arguments and sample name"
+    "1.0.25": "Add null checks for isUnderRootSubject arguments and sample name",
+    "1.0.26": "Fix bug with removing/adding root subject"
   }
 }

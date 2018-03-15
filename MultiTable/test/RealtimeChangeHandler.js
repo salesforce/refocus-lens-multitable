@@ -172,4 +172,203 @@ describe('./test/RealtimeChangeHandler.js >', () => {
       .not.to.throw(Error);
     });
   });
+
+  describe('handle: addSubject >', () => {
+    let data;
+    const hierarchy = {
+      absolutePath: 'root',
+      parentAbsolutePath: '',
+      name: 'root',
+      children: [{
+        absolutePath: 'root.s1',
+        parentAbsolutePath: 'root',
+        name: 's1',
+        children: [{
+          absolutePath: 'root.s1.s2',
+          parentAbsolutePath: 'root.s1',
+          name: 's2',
+        }],
+      }],
+    };
+
+    beforeEach(() => {
+      data = new SubjectGroups(hierarchy);
+    });
+
+    function getGroup(absPath) {
+      return data.map[absPath];
+    }
+
+    function getSubject(subject) {
+      const subjectGroup = data.map[subject.parentAbsolutePath.toLowerCase()];
+      if (subjectGroup) {
+        return subjectGroup.subjects[subject.absolutePath.toLowerCase()];
+      }
+    }
+
+    it('basic add', () => {
+      const subject = {
+        absolutePath: 'root.s1.s3',
+        parentAbsolutePath: 'root.s1',
+        name: 's3',
+      };
+
+      expect(getSubject(subject)).to.not.exist;
+      RealtimeChangeHandler.handle({'subject.add': subject}, data);
+      expect(getSubject(subject)).to.exist;
+    });
+
+    it('add under root', () => {
+      const subject = {
+        absolutePath: 'root.s3',
+        parentAbsolutePath: 'root',
+        name: 's3',
+      };
+
+      expect(getSubject(subject)).to.not.exist;
+      RealtimeChangeHandler.handle({'subject.add': subject}, data);
+      expect(getSubject(subject)).to.exist;
+    });
+
+    it('add outside of root - not added', () => {
+      const subject = {
+        absolutePath: 's3',
+        parentAbsolutePath: '',
+        name: 's3',
+      };
+
+      expect(getGroup(subject.parentAbsolutePath)).to.not.exist;
+      RealtimeChangeHandler.handle({'subject.add': subject}, data);
+      expect(getGroup(subject.parentAbsolutePath)).to.not.exist;
+    });
+
+
+    it('no existing parent subject - not added', () => {
+      const subject = {
+        absolutePath: 'root.s3.s4',
+        parentAbsolutePath: 'root.s3',
+        name: 's4',
+      };
+
+      expect(getGroup(subject.parentAbsolutePath)).to.not.exist;
+      RealtimeChangeHandler.handle({'subject.add': subject}, data);
+      expect(getGroup(subject.parentAbsolutePath)).to.not.exist;
+    });
+
+    it('existing parent with no children (no group)', () => {
+      const subject = {
+        absolutePath: 'root.s1.s2.s3',
+        parentAbsolutePath: 'root.s1.s2',
+        name: 's3',
+      };
+
+      expect(getGroup(subject.parentAbsolutePath)).to.not.exist;
+      RealtimeChangeHandler.handle({'subject.add': subject}, data);
+      expect(getGroup(subject.parentAbsolutePath)).to.exist;
+      expect(getSubject(subject)).to.exist;
+    });
+
+    it('existing root with no children', () => {
+      const hierarchy = {
+        absolutePath: 'root',
+        parentAbsolutePath: '',
+        name: 'root',
+      };
+      data = new SubjectGroups(hierarchy);
+      const subject = {
+        absolutePath: 'root.s1',
+        parentAbsolutePath: 'root',
+        name: 's1',
+      };
+
+      expect(getGroup(subject.parentAbsolutePath)).to.exist;
+      expect(getSubject(subject)).to.not.exist;
+      RealtimeChangeHandler.handle({'subject.add': subject}, data);
+      expect(getSubject(subject)).to.exist;
+    });
+
+
+    it('remove then add back', () => {
+      const subject = {
+        absolutePath: 'root.s1.s2',
+        parentAbsolutePath: 'root.s1',
+        name: 's2',
+      };
+
+      expect(getSubject(subject)).to.exist;
+      RealtimeChangeHandler.handle({'subject.remove': subject}, data);
+      expect(getGroup(subject.parentAbsolutePath)).to.not.exist;
+      RealtimeChangeHandler.handle({'subject.add': subject}, data);
+      expect(getSubject(subject)).to.exist;
+    });
+
+    it('remove root subject, then add back', () => {
+      const root = {
+        absolutePath: 'root',
+        parentAbsolutePath: '',
+        name: 'root',
+      };
+      const s1 = {
+        absolutePath: 'root.s1',
+        parentAbsolutePath: 'root',
+        name: 's1',
+      };
+      const newRoot = {
+        absolutePath: 'root',
+        parentAbsolutePath: 'root',
+        name: 'root',
+      };
+
+      expect(getGroup(root.absolutePath)).to.exist;
+      expect(getSubject(s1)).to.exist;
+      RealtimeChangeHandler.handle({'subject.remove': root}, data);
+      expect(getGroup(root.parentAbsolutePath)).to.not.exist;
+      expect(getGroup(root.absolutePath)).to.not.exist;
+      RealtimeChangeHandler.handle({'subject.add': root}, data);
+      expect(getGroup(root.absolutePath)).to.exist;
+      expect(getSubject(newRoot)).to.exist;
+      expect(getSubject(s1)).to.not.exist;
+    });
+
+    it('lone root subject - remove root then add back', () => {
+      const root = {
+        absolutePath: 'root',
+        parentAbsolutePath: '',
+        name: 'root',
+      };
+      const newRoot = {
+        absolutePath: 'root',
+        parentAbsolutePath: 'root',
+        name: 'root',
+      };
+      data = new SubjectGroups(root);
+
+      expect(getGroup(root.parentAbsolutePath)).to.not.exist;
+      expect(getGroup(root.absolutePath)).to.exist;
+      RealtimeChangeHandler.handle({'subject.remove': root}, data);
+      expect(getGroup(root.parentAbsolutePath)).to.not.exist;
+      expect(getGroup(root.absolutePath)).to.not.exist;
+      RealtimeChangeHandler.handle({'subject.add': root}, data);
+      expect(getGroup(root.absolutePath)).to.exist;
+      expect(getSubject(newRoot)).to.exist;
+    });
+
+    it('lens root not hierarchy root - remove and add back', () => {
+      const lensRoot = {
+        absolutePath: 'root.lensRoot',
+        parentAbsolutePath: 'root',
+        name: 'lensRoot',
+      };
+      data = new SubjectGroups(lensRoot);
+
+      expect(getGroup(lensRoot.parentAbsolutePath)).to.exist;
+      expect(getSubject(lensRoot)).to.exist;
+      RealtimeChangeHandler.handle({'subject.remove': lensRoot}, data);
+      expect(getGroup(lensRoot.parentAbsolutePath)).to.not.exist;
+      expect(getSubject(lensRoot)).to.not.exist;
+      RealtimeChangeHandler.handle({'subject.add': lensRoot}, data);
+      expect(getGroup(lensRoot.parentAbsolutePath)).to.exist;
+      expect(getSubject(lensRoot)).to.exist;
+    });
+  });
 });

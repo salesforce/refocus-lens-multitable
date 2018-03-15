@@ -72,16 +72,24 @@ function onSubjectAdd(data, subject) {
     let subjectGroup = data.findGroupForNewSubject(subject);
 
     if (!subjectGroup) {
-      const parentPath = subject.parentAbsolutePath;
-      const grandparentGroup = data.getParentGroupForAbsolutePath(parentPath);
-      if (!grandparentGroup) {
-        return;
-      };
-      const parentSubject = grandparentGroup.subjects[parentPath.toLowerCase()];
-      if (!parentSubject)  {
-        return;
-      };
-      subjectGroup = data.addSubjectGroup(parentPath, parentSubject);
+      if (subject.absolutePath === data.rootSubject) {
+        if (subject.parentAbsolutePath === '') {
+          subjectGroup = data.addSubjectGroup(subject.absolutePath, undefined);
+        } else {
+          subjectGroup = data.addSubjectGroup(subject.parentAbsolutePath, undefined);
+        }
+      } else {
+        const parentPath = subject.parentAbsolutePath;
+        const grandparentGroup = data.getParentGroupForAbsolutePath(parentPath);
+        if (!grandparentGroup) {
+          return;
+        }
+        const parentSubject = grandparentGroup.subjects[parentPath.toLowerCase()];
+        if (!parentSubject) {
+          return;
+        }
+        subjectGroup = data.addSubjectGroup(parentPath, parentSubject);
+      }
     }
 
     data.addSubject(subjectGroup, subject);
