@@ -145,6 +145,7 @@ function validateData(data) {
 
 function validateChg(chg) {
   if (chg && typeof chg === 'object' && (
+    chg.hasOwnProperty('sample.nochange') ||
     chg.hasOwnProperty('sample.add') ||
     chg.hasOwnProperty('sample.remove') || (
       chg.hasOwnProperty('sample.update') &&
@@ -179,6 +180,8 @@ module.exports = class RealtimeChangeHandler {
       onSampleRemove(data, chg['sample.remove']);
     } else if (chg['sample.update'] && chg['sample.update'].new) {
       onSampleUpdate(data, chg['sample.update'].new);
+    } else if (chg['sample.nochange']) {
+      // TODO - for now it's a no-op
     } else if (chg['subject.add']) {
       onSubjectAdd(data, chg['subject.add']);
     } else if (chg['subject.remove']) {
