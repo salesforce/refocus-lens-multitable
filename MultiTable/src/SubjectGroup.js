@@ -172,6 +172,16 @@ module.exports = class SubjectGroup {
   }
 
   /**
+   * Update the sample in this SubjectGroup and adjust the aspectsToShow and
+   * subjectsToShow accordingly.
+   *
+   * @param {Object} s - the sample to update
+   */
+  updateSampleUpdatedAtTimestamp(name, updatedAt) {
+    this.samples[name.toLowerCase()].updatedAt = updatedAt;
+  }
+
+  /**
    * Remove the sample from this SubjectGroup.
    *
    * @param {Object} s - the sample to remove
