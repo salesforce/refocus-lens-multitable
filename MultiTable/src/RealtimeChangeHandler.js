@@ -65,6 +65,23 @@ function onSampleUpdate(data, change) {
   }
 }
 
+function onSampleNoChange(data, name, updatedAt) {
+  // console.log(new Date(), 'onSampleNoChange', name, updatedAt);
+  if (SampleUtils.isUnderRootSubject({ name }, data.rootSubject)) {
+    const subjectGroup = data.getParentGroupForAbsolutePath(name);
+    if (subjectGroup) {
+      subjectGroup.updateSampleUpdatedAtTimestamp(name, updatedAt);
+      const subject = subjectGroup.getSubjectForSample(change);
+      if (subject) {
+        const index = subject.samples.findIndex(s => (s.name === change.name));
+        if (index >= 0) {
+          subject.samples[index].updatedAt = updatedAt;
+        }
+      }
+    }
+  }
+}
+
 function onSubjectAdd(data, subject) {
   // console.log(new Date(), 'onSubjectAdd', subject);
   if (SubjectUtils.isUnderRootSubject(subject, data.rootSubject)) {
@@ -181,7 +198,8 @@ module.exports = class RealtimeChangeHandler {
     } else if (chg['sample.update'] && chg['sample.update'].new) {
       onSampleUpdate(data, chg['sample.update'].new);
     } else if (chg['sample.nochange']) {
-      // TODO - for now it's a no-op
+      onSampleNoChange(data, chg['sample.nochange'].name,
+        chg['sample.nochange'].updatedAt);
     } else if (chg['subject.add']) {
       onSubjectAdd(data, chg['subject.add']);
     } else if (chg['subject.remove']) {

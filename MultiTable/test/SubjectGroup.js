@@ -159,6 +159,21 @@ describe('./test/SubjectGroup.js >', () => {
     });
   });
 
+  describe('updateSampleUpdatedAtTimestamp ', () => {
+    it('Updating sample updateAt timestamp should only udpate that one ' +
+      'attribute', () => {
+      const subjectGroup = new SubjectGroup(subject.parentAbsolutePath,
+        subject);
+      subjectGroup.addSample(sample);
+      subjectGroup
+        .updateSampleUpdatedAtTimestamp(sample.name,
+          '1968-11-26T23:28:34.260Z');
+      const samples = subjectGroup.samples;
+      expect(samples[sample.name.toLowerCase()])
+        .to.have.property('updatedAt', '1968-11-26T23:28:34.260Z');
+    });
+  });
+
   describe('removeSample ', () => {
     it('Removing the sample should remove only the sample from the ' +
       'data structure', () => {
