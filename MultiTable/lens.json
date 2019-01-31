@@ -4,7 +4,7 @@
   "helpEmail": "igoldstein@salesforce.com",
   "helpUrl": "https://github.com/salesforce/refocus-lens-multitable",
   "license": "TBD",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "releaseNotes": {
     "0.0.2": "Add more fields to the contents of the Sample modal.",
     "0.0.3": "Use handlebars templates; move external libraries to /lib",
@@ -43,6 +43,7 @@
     "1.0.25": "Add null checks for isUnderRootSubject arguments and sample name",
     "1.0.26": "Fix bug with removing/adding root subject",
     "1.0.27": "Don't reject 'sample.nochange' events as invalid",
-    "1.1.0": "Handle the sample.nochange event"
+    "1.1.0": "Handle the sample.nochange event",
+    "1.1.1": "set the legend as fixed-position top of page"
   }
 }
