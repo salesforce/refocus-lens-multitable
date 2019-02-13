@@ -118,3 +118,7 @@ body {
 #modal-aspect table.ranges th {
   text-align: center;
 }
+
+#multi-table-container {
+  margin-top: 50px;
+}
