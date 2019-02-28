@@ -4,7 +4,7 @@
   "helpEmail": "igoldstein@salesforce.com",
   "helpUrl": "https://github.com/salesforce/refocus-lens-multitable",
   "license": "TBD",
-  "version": "1.1.0",
+  "version": "1.1.3",
   "releaseNotes": {
     "0.0.2": "Add more fields to the contents of the Sample modal.",
     "0.0.3": "Use handlebars templates; move external libraries to /lib",
@@ -45,6 +45,7 @@
     "1.0.27": "Don't reject 'sample.nochange' events as invalid",
     "1.1.0": "Handle the sample.nochange event",
     "1.1.1": "Fix onSampleNoChange",
-    "1.1.2": "set the legend as fixed-position at top of page"
+    "1.1.2": "set the legend as fixed-position at top of page",
+	  "1.1.3": "add bottom border to legend now that it's fixed-position"
   }
 }

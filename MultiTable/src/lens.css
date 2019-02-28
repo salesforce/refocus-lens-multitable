@@ -82,6 +82,12 @@ body {
 	margin-left: 310px;
 }
 
+.navborder {
+  border-bottom: solid 1px #5d6265;
+  border-left: solid 1px #5d6265;
+  border-radius: 0 0 0 5px;
+}
+
 @keyframes alternateColors {
   from { background-color: #000; }
   to { background-color: null; }
@@ -108,7 +114,6 @@ body {
   border-color: #ccc;
 }
 
-
 #modal-aspect table.ranges {
     width: auto;
     font-size: inherit;
@@ -124,9 +129,9 @@ body {
 }
 
 #loading {
-  margin-top: 50px;
+  padding-top: 50px;
 }
 
 #awesome {
-  margin-top: 50px;
+  padding-top: 50px;
 }
