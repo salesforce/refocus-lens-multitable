@@ -43,6 +43,8 @@
     "1.0.25": "Add null checks for isUnderRootSubject arguments and sample name",
     "1.0.26": "Fix bug with removing/adding root subject",
     "1.0.27": "Don't reject 'sample.nochange' events as invalid",
-    "1.1.0": "Handle the sample.nochange event"
+    "1.1.0": "Handle the sample.nochange event",
+    "1.1.1": "Fix onSampleNoChange",
+    "1.1.2": "set the legend as fixed-position at top of page"
   }
 }

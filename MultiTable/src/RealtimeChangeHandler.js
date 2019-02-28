@@ -71,9 +71,9 @@ function onSampleNoChange(data, name, updatedAt) {
     const subjectGroup = data.getParentGroupForAbsolutePath(name);
     if (subjectGroup) {
       subjectGroup.updateSampleUpdatedAtTimestamp(name, updatedAt);
-      const subject = subjectGroup.getSubjectForSample(change);
+      const subject = subjectGroup.getSubjectForSample({ name });
       if (subject) {
-        const index = subject.samples.findIndex(s => (s.name === change.name));
+        const index = subject.samples.findIndex(s => (s.name === name));
         if (index >= 0) {
           subject.samples[index].updatedAt = updatedAt;
         }
