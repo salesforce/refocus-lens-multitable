@@ -29,7 +29,7 @@
             </p>
             <h5>{{heading.message}}</h5>
             <p>
-              {{data.messageCode}}{{#if data.messageBody}}{{#if data.messageCode}}:{{/if}}
+              {{data.messageCode}}{{#if data.aspect.valueLabel}} {{data.aspect.valueLabel}}{{/if}}{{#if data.messageBody}}{{#if data.messageCode}}:{{/if}}
                 {{multiline data.messageBody}}
               {{/if}}
             </p>
