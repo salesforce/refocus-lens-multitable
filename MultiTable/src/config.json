@@ -23,11 +23,13 @@
         "description": "Aspect Description",
         "help": "Aspect Help",
         "lastUpdated": "Last Updated",
-        "message": "Message",
+        "messageBody": "Message Body",
+        "messageCode": "Message Code",
         "sampleRelatedLinks": "Sample Related Links",
         "aspectRelatedLinks": "Aspect Related Links",
         "status": "Status",
-        "tags": "Aspect Tags"
+        "tags": "Aspect Tags",
+        "value": "Value"
       }
     },
     "subject": {
