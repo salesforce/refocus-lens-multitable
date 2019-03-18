@@ -4,7 +4,7 @@
   "helpEmail": "igoldstein@salesforce.com",
   "helpUrl": "https://github.com/salesforce/refocus-lens-multitable",
   "license": "TBD",
-  "version": "1.1.5",
+  "version": "1.1.7",
   "releaseNotes": {
     "0.0.2": "Add more fields to the contents of the Sample modal.",
     "0.0.3": "Use handlebars templates; move external libraries to /lib",
@@ -49,6 +49,7 @@
 	  "1.1.3": "add bottom border to legend now that it's fixed-position",
     "1.1.4": "display value label in sample modal when provided",
     "1.1.5": "display messageCode, messageBody, value and value label separately",
-    "1.1.6": "fix the if conditions for messageCode, messageBody, value in sample modal"
+    "1.1.6": "fix the if conditions for messageCode, messageBody, value in sample modal",
+    "1.1.7": "fix duplicate rows/columns bug - add lowercase version of name to aspectsToShow/subjectsToShow sets"
   }
 }

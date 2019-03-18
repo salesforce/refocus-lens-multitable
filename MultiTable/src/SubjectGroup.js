@@ -86,14 +86,13 @@ module.exports = class SubjectGroup {
 
       const aspectToShow = sampleNameSplit.aspect.name;
       if (this.aspects[aspectToShow.toLowerCase()]) {
-        this.aspectsToShow.add(aspectToShow);
+        this.aspectsToShow.add(aspectToShow.toLowerCase());
       }
 
       const subjectToShow = sampleNameSplit.subject.absolutePath;
       if (this.subjects[subjectToShow.toLowerCase()]) {
-        this.subjectsToShow.add(subjectToShow);
+        this.subjectsToShow.add(subjectToShow.toLowerCase());
       }
-
     }
   }
 

@@ -23,6 +23,14 @@ describe('./test/SubjectGroup.js >', () => {
     relatedLinks: [],
   };
 
+  const subject2 = {
+    absolutePath: 'Fellowship.Gandalf.JJ2',
+    isPublished: true,
+    name: 'JJ2',
+    parentAbsolutePath: 'Fellowship.Gandalf',
+    relatedLinks: [],
+  };
+
   const sample = { name: 'Fellowship.Gandalf.JJ1|LOCKERROOM',
     status: 'OK',
     previousStatus: 'Timeout',
@@ -31,6 +39,18 @@ describe('./test/SubjectGroup.js >', () => {
     aspect: {
       isPublished: true,
       name: 'LOCKERROOM',
+      rank: 0,
+    },
+  };
+
+  const sample2 = { name: 'Fellowship.Gandalf.JJ2|LockerRoom',
+    status: 'OK',
+    previousStatus: 'Timeout',
+    value: '0',
+    relatedLinks: [],
+    aspect: {
+      isPublished: true,
+      name: 'LockerRoom',
       rank: 0,
     },
   };
@@ -56,6 +76,19 @@ describe('./test/SubjectGroup.js >', () => {
       expect(samples[sample.name.toLowerCase()]).to.eql(sample);
       expect(aspects[sample.aspect.name.toLowerCase()]).to.eql(sample.aspect);
 
+      subjectGroup.addSubject(subject2);
+      subjectGroup.addSample(sample2);
+      const samples2 = subjectGroup.samples;
+      const aspects2 = subjectGroup.aspects;
+      const subjects2 = subjectGroup.subjects;
+
+      expect(Object.keys(subjects2).length).to.equal(2);
+      expect(Object.keys(samples2).length).to.equal(2);
+      expect(Object.keys(aspects2).length).to.equal(1);
+
+      expect(subjects2[subject2.absolutePath.toLowerCase()]).to.eql(subject2);
+      expect(samples2[sample2.name.toLowerCase()]).to.eql(sample2);
+      expect(aspects2[sample2.aspect.name.toLowerCase()]).to.eql(sample2.aspect);
     });
 
     it('calling updateSubject should update the subject in SubjectGroup', () => {
@@ -102,6 +135,14 @@ describe('./test/SubjectGroup.js >', () => {
       expect(aspects[sample.aspect.name]).to.eql(undefined);
       expect(samples[sample.name.toLowerCase()]).to.eql(sample);
       expect(aspects[sample.aspect.name.toLowerCase()]).to.eql(sample.aspect);
+
+      subjectGroup.addSample(sample2);
+      const samples2 = subjectGroup.samples;
+      const aspects2 = subjectGroup.aspects;
+      expect(samples2[sample2.name]).to.eql(undefined);
+      expect(aspects2[sample2.aspect.name]).to.eql(undefined);
+      expect(samples2[sample2.name.toLowerCase()]).to.eql(sample2);
+      expect(aspects2[sample2.aspect.name.toLowerCase()]).to.eql(sample2.aspect);
     });
   });
 
