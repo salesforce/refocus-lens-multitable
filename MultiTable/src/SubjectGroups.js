@@ -68,6 +68,7 @@ function jsonToSubjectGroups(json) {
       console.log(e); // NO-OP InvalidSampleNameException
     }
   });
+
   return groups;
 } // jsonToSubjectGroups
 
