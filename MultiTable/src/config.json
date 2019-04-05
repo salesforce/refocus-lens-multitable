@@ -59,6 +59,7 @@
         "valueType": "Value Type",
         "valueLabel": "Value Label",
         "statusAssignment": "Status Assignment",
+        "timeout": "Timeout",
         "criticalRange": "Critical",
         "warningRange": "Warning",
         "infoRange": "Info",
