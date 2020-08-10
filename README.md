@@ -1,5 +1,7 @@
 # refocus-lens-multitable
 
+| NOTE: This repository is infrequently maintained.
+
 ## MultiTable
 
 A fluid multi-table layout. Each table groups subjects together under a shared parent.
